@@ -2,7 +2,6 @@
 session_start();
 @include 'config.php';
 
-
 if (isset($_POST['update_update_btn'])) {
     $update_value = $_POST['update_quantity'];
     $update_id = $_POST['update_quantity_id'];
@@ -303,11 +302,11 @@ if (isset($_GET['delete_all'])) {
     </div>
     <script src="jquery/jquery.nice-number.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   <br>
-   <br>
-   <br>
-   <br>
-   <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <!-- footer -->
     <div><?php include 'footer.php'; ?></div>
     <!-- end footer -->
