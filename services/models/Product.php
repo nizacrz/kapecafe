@@ -20,9 +20,22 @@ class Product
         $this->conn = $db;
     }
 
-    public function read()
+    public function read($size = 30, $index = 1, $offset = 0)
     {
         $query = "SELECT * FROM {$this->DB_TABLE}";
+
+        $limit = '';
+
+        if ($size > 0) {
+            if ($index > 0) {
+                $offset = $index * $size - $size + $offset;
+                $limit = $limit . " LIMIT $offset, $size";
+            } else {
+                $limit = $limit . " LIMIT $offset, $size";
+            }
+        }
+
+        $query = $query . $limit;
 
         // Prepare statement
         $stmt = $this->conn->prepare($query);
@@ -57,14 +70,29 @@ class Product
         return $stmt;
     }
 
-    public function read_products_per_category()
+    public function read_products_per_category($size = 30, $index = 1, $offset = 0)
     {
         $query = "SELECT * FROM {$this->DB_TABLE} WHERE category = ?";
 
+        $limit = '';
+
+        if ($size > 0) {
+            if ($index > 0) {
+                $final = $size * $index + $offset;
+                $offset = $index * $size - $size + $offset;
+                $limit = $limit . " LIMIT $offset, $final";
+            } else {
+                $final = $size + $offset;
+                $limit = $limit . " LIMIT $offset, $final";
+            }
+        }
+
+        $query = $query . $limit;
+
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->category);
 
         $stmt->execute();
-
         return $stmt;
     }
 

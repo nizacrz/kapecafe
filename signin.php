@@ -7,17 +7,17 @@
     <meta name="viewport" content="width=device-width,
 	 initial-scale=1.0">
     <title>Sign in | kapecafé</title>
-    <link rel="icon" href="assets/logo/kapecafé-logo.png">
-    <link rel="stylesheet" href="account-style.css">
+    <link rel="icon" href="/assets/logo/kapecafé-logo.png">
+    <link rel="stylesheet" href="/assets/styles/account-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
 
 <body>
 
     <div class="container">
-        <center><img src="assets/logo/Icon.png" </center>
+        <center><img src="/assets/logo/Icon.png" </center>
 
-            <form action="login_conn.php" method="POST" class="login-email">
+            <form action="/services/handler.php?login" method="POST" class="login-email">
                 <p class="login-text" style="font-size: 2rem; font-weight: 800;">Hello Again!</p>
                 <center><span class="subtitle"> Please login to kapecafé to continue. </span> </center>
                 <br>
@@ -41,13 +41,13 @@
                 <div class="input-group">
                     <button name="submit" class="btn" value="register now">Log In</button>
                 </div>
-                <center><span class="subtitle"> Not a member? <a href="signup.php">Register Now</a> </span> </center>
+                <center><span class="subtitle"> Not a member? <a href="/signup.php">Register Now</a> </span> </center>
             </form>
     </div>
 
     <!-- JQUERY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="account.js"></script>
+    <script src="/assets/scripts/account.js"></script>
 
 </body>
 

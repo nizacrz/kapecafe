@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width,
          initial-scale=1.0">
     <title>Create an Account | kapecafé</title>
-    <link rel="icon" href="assets/logo/kapecafé-logo.png">
-    <link rel="stylesheet" href="account-style.css">
+    <link rel="icon" href="/assets/logo/kapecafé-logo.png">
+    <link rel="stylesheet" href="/assets/styles/account-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
 
@@ -19,7 +19,7 @@
 
         <center><img src="assets/logo/Icon.png" </center>
 
-            <form action="register_conn.php" method="POST" class="login-email">
+            <form action="/services/handler.php" method="POST" class="login-email">
                 <p class="login-text" style="font-size: 2rem; font-weight: 750;">Create a kapecafé account</p>
                 <?php if (isset($_GET['error'])) { ?>
                     <p class="fail"><?php echo $_GET['error']; ?></p>
@@ -54,7 +54,7 @@
     </div>
     <!-- JQUERY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="account.js"></script>
+    <script src="/assets/scripts/account.js"></script>
 
 </body>
 

@@ -1,4 +1,5 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . '/shared/general.php';
 session_start();
 @include 'config.php';
 
@@ -61,10 +62,10 @@ if (isset($_GET['delete_all'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- app css -->
-    <link rel="shortcut icon" type="image/png" href="assets/logo/Icon.png">
-    <link rel="stylesheet" href="cart.css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="shortcut icon" type="image/png" href="/assets/logo/Icon.png">
+    <link rel="stylesheet" href="/assets/styles/cart.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -105,110 +106,7 @@ if (isset($_GET['delete_all'])) {
 </head>
 
 <body>
-    <header>
-        <!-- mobile menu -->
-        <div class="mobile-menu bg-second">
-            <a href="#" class="mb-logo">kapecafé</a>
-            <span class="mb-menu-toggle" id="mb-menu-toggle">
-                <i class='bx bx-menu'></i>
-            </span>
-        </div>
-        <!-- end mobile menu -->
-
-        <!-- main header -->
-        <div class="header-wrapper" id="header-wrapper">
-            <span class="mb-menu-toggle mb-menu-close" id="mb-menu-close">
-                <i class='bx bx-x'></i>
-            </span>
-
-            <!-- search nav-->
-            <div class="bg-main">
-                <div class="mid-header container1">
-                    <a class="navbar-brand" href="index.php"><img src="assets/logo/Icon.png" width="160" height="70" alt="Logo"></a>
-                    <div class="search">
-                        <input type="text" placeholder="Search">
-                        <i class='bx bx-search-alt'></i>
-                    </div>
-                    <ul class="user-menu">
-                        <li><a href="#"><i class='bx bx-bell'></i></a></li>
-                        <li><a href="logout.php"><i class='bx bx-log-out-circle'></i></a></li>
-                        <!-- CART ICON -->
-                        <?php
-
-                        $select_rows = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
-                        $row_count = mysqli_num_rows($select_rows);
-
-                        ?>
-                        <li><a href="cart.php"><i class='glyphicon glyphicon-shopping-cart my-cart-icon bx bx-cart'><span class="badge badge-notify my-cart-badge"><?php echo $row_count; ?></span></i></a></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- search nav -->
-
-            <!-- bottom header -->
-            <div class="bg-second">
-                <div class="bottom-header container">
-                    <ul class="main-menu">
-                        <li>
-                            <a href="index.php">Home</a>
-                        </li>
-                        <!-- mega menu -->
-                        <li class="mega-dropdown">
-                            <!-- Shop-->
-                            <a href="#">
-                                Shop by Categories
-                                <i class="bx bxs-chevron-down"></i>
-                            </a>
-                            <div class="mega-content">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <!--all handler-->
-                                        <div class="box-menu">
-                                            <ul>
-                                                <li>
-                                                    <a href="shop_1.php">All Products</a>
-                                                </li>
-                                                <li>
-                                                    <a href="1_cakes.php">
-                                                        Cakes
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="2_beverages.php">
-                                                        Classic Beverages
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="3_pastries.php">
-                                                        Filipino Pastries
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="4_kakanin.php">
-                                                        Special Kakanin
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- end mega menu -->
-                        <li>
-                            <a href="about.php">About Us</a>
-                        </li>
-                        <li>
-                            <a href="contacts.php">Contact</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!-- end bottom header -->
-        </div>
-        <!-- end main header -->
-    </header>
-    <!-- end header -->
+    <?php html_searchbar() ?>
 
     <div class="cart-container">
 
@@ -300,16 +198,17 @@ if (isset($_GET['delete_all'])) {
             </center>
         </section>
     </div>
-    <script src="jquery/jquery.nice-number.js"></script>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <?php html_footer(); ?>
+
+    <script src="/assets/scripts/jquery.nice-number.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <!-- footer -->
-    <div><?php include 'footer.php'; ?></div>
-    <!-- end footer -->
+
 </body>
 
 </html>
