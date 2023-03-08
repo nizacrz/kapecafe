@@ -149,10 +149,10 @@ function html_navbar($is_logged_in = false)
     ";
 }
 
-function html_searchbar($cart_size = 0)
+function html_searchbar($is_logged_in = false, $cart_size = 0)
 {
 
-    echo <<<HTML
+    echo "
     <!-- header -->
     <header>
         <!-- main header -->
@@ -172,9 +172,10 @@ function html_searchbar($cart_size = 0)
                     </div>
                     <ul class='user-menu'>
                         <li><a href='#'><i class='bx bx-bell'></i></a></li>
-                        <li><a href='logout.php'><i class='bx bx-log-out-circle'></i></a></li>
+                        " . ($is_logged_in ? "
+                        <li><a href='/services/handler.php?logout'><i class='bx bx-log-out-circle'></i></a></li>
                         <!-- CART ICON -->
-                        <li><a href='cart.php'><i class='glyphicon glyphicon-shopping-cart my-cart-icon bx bx-cart'><span class='badge badge-notify my-cart-badge'>$cart_size</span></i></a></li>
+                        <li><a href='/cart.php'><i class='glyphicon glyphicon-shopping-cart my-cart-icon bx bx-cart'><span class='badge badge-notify my-cart-badge'>$cart_size</span></i></a></li>" : "<li><a href='/signin.php'><i class='bx bx-user-circle'></i></a></li>") . "
                     </ul>
                 </div>
             </div>
@@ -242,5 +243,5 @@ function html_searchbar($cart_size = 0)
         </div>
         <!-- end main header -->
     </header>
-    HTML;
+    ";
 }

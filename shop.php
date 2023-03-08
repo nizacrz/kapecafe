@@ -1,31 +1,40 @@
 <?php
-include 'config.php';
 include_once './shared/general.php';
 include_once './services/config/Database.php';
 include_once './services/models/Product.php';
 include_once './services/models/User.php';
+
+
 session_start();
 
-if (isset($_POST['add_to_cart'])) {
+$conn = Database::connect();
+$product = new Product($conn);
+$user;
 
-    $product_name = $_POST['product_name'];
-    $product_price = $_POST['product_price'];
-    $product_image = $_POST['product_image'];
-    $product_quantity = 1;
-
-    $select_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_name'");
-
-    if (mysqli_num_rows($select_cart) > 0) {
-        echo '<script>alert("Product already added to cart")</script>';
-    } else {
-        $insert_product = mysqli_query($conn, "INSERT INTO `cart`(name, price, image, quantity) VALUES('$product_name', '$product_price', '$product_image', '$product_quantity')");
-        echo '<script>alert("Product added to cart succesfully")</script>';
-    }
+if (isset($_SESSION['id'])) {
+    $user = new User($conn);
+    $user->id = intval($_SESSION['id']);
+    $user->read_single();
 }
 
-$db = new Database();
-$conn = $db->connect();
-$product = new Product($conn);
+if (isset($_POST['add_to_cart'])) {
+    if (isset($user)) {
+        // Instantiate a cart
+        // Define cart attributes
+        // CREATE ITEM OR INSERT OR UPDATE
+        $product_quantity = 1;
+
+        $select_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_name'");
+
+        if (mysqli_num_rows($select_cart) > 0) {
+            echo '<script>alert("Product already added to cart")</script>';
+        } else {
+            $insert_product = mysqli_query($conn, "INSERT INTO `cart`(name, price, image, quantity) VALUES('$product_name', '$product_price', '$product_image', '$product_quantity')");
+            echo '<script>alert("Product added to cart succesfully")</script>';
+        }
+    }
+    echo '<script>alert("You must log in first"); window.location.href = "/signin.php"</script>';
+}
 
 $category;
 $index_size = 1;
@@ -66,7 +75,7 @@ if (isset($category)) {
 
 <head>
     <!-- ADDTOCART STYLE -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/styles/bootstrap.min.css">
     <style>
         .badge-notify {
             right: -10px;
@@ -101,7 +110,7 @@ if (isset($category)) {
 
 <body>
     <?php
-    html_searchbar()
+    html_searchbar(isset($user))
     ?>
     <!-- products content -->
     <div class="bg-main">
@@ -139,28 +148,22 @@ if (isset($category)) {
 
                                         <div class="product-btn1">
                                             <!--ADD TO CART -->
-                                            <button class="btn-flat btn-hover btn-cart-add my-cart-btn" input type="submit" name="add_to_cart" value="add to cart" style="font-size: 16px; width: 180px;">
-                                                <i class='bx bxs-cart-add'> ADD TO CART</i>
+                                            <button class="btn-flat btn-hover btn-cart-add my-cart-btn" input type="submit" name="add_to_cart" value="<?php echo $row['id'] ?>" style="font-size: 16px; width: 180px;">
+                                                <i class='bx bxs-cart-add'>ADD TO CART</i>
                                             </button>
                                         </div>
                                         <!--name-->
                                         <div class="product-card-name">
                                             <br><?php echo $row['name']; ?>
-                                            <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>" />
                                         </div>
                                         <!--description-->
                                         <div class="product-card-desc">
                                             <br><?php echo $row['description']; ?>
-                                            <input type="hidden" name="product_description" value="<?php echo $row['description']; ?>" />
                                         </div>
                                         <!--price-->
                                         <div class="product-card-price">
                                             <span class="curr-price">₱ <?php echo $row['price']; ?></span>
-                                            <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>" />
                                         </div>
-                                        <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>" />
-                                        <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>" />
-                                        <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>" />
                                     </div>
                                 </div>
                             </form>

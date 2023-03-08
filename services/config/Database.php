@@ -2,24 +2,24 @@
 
 class Database
 {
-    private $db_host = 'localhost';
-    private $db_name = 'kapecafe';
-    private $db_username = 'root';
-    private $db_password = '';
-    private $conn;
+    private static $db_host = 'localhost';
+    private static $db_name = 'kapecafe';
+    private static $db_username = 'root';
+    private static $db_password = '';
+    private static $conn;
 
-    public function connect()
+    public static function connect()
     {
-        if (!isset($this->conn)) {
+        if (!isset(Database::$conn)) {
             try {
-                $this->conn = new PDO('mysql:host=' . $this->db_host . ';dbname=' . $this->db_name, $this->db_username, $this->db_password);
-                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                Database::$conn = new PDO('mysql:host=' . Database::$db_host . ';dbname=' . Database::$db_name, Database::$db_username, Database::$db_password);
+                Database::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 echo 'Connection Error: ' . $e->getMessage();
             }
         }
 
-        return $this->conn;
+        return Database::$conn;
     }
 }
 

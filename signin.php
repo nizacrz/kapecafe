@@ -1,3 +1,25 @@
+<?php
+include_once './services/config/Database.php';
+include_once './services/models/User.php';
+
+
+session_start();
+
+$user;
+
+if (isset($_SESSION['id'])) {
+    $user = new User(Database::connect());
+    $user->id = intval($_SESSION['id']);
+    $user->read_single();
+
+    if (isset($user->username)) {
+        header("Location: /index.php");
+        die();
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

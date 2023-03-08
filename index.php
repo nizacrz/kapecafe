@@ -1,21 +1,23 @@
 <?php
-include 'config.php';
+include_once './services/config/Database.php';
+include_once './services/models/User.php';
 include './shared/general.php';
 
 session_start();
 
 $user;
 
-if (isset($_SESSION['user'])) {
-    $user = $_SESSION['user'];
+if (isset($_SESSION['id'])) {
+    $user = new User(Database::connect());
+    $user->id = intval($_SESSION['id']);
+    $user->read_single();
 }
-
 
 html_header();
 ?>
 
 <body class="body-fixed">
-    <?php html_navbar() ?>
+    <?php html_navbar(isset($user)) ?>
 
     <div id="viewport">
         <div id="js-scroll-content">

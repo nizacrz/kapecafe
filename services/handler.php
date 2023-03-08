@@ -6,8 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/string.php';
 
 session_start();
 
-$db = new Database();
-$conn = $db->connect();
+$conn = Database::connect();
 
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
@@ -38,7 +37,7 @@ if (isset($_POST["createAccount"])) {
         $result = $user->create();
 
         if ($result) {
-            $_SESSION['user'] = $user;
+            $_SESSION['id'] = $user->id;
             header("Location: /signup.php?success=Your account has been created successfully!");
             die();
         } else {
@@ -57,7 +56,7 @@ if (isset($_POST["createAccount"])) {
         $user->password = $_POST['password'];
 
         if ($user->login()) {
-            $_SESSION['user'] = $user;
+            $_SESSION['id'] = $user->id;
             if ($user->role === "Admin") {
                 header('Location: /admin/product_maintenance.php');
                 die();
