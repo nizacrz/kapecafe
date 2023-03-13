@@ -1,25 +1,54 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/shared/general.php';
+include_once './services/config/Database.php';
+include_once './services/models/Product.php';
+include_once './services/models/User.php';
+include_once './services/models/Cart.php';
+
 session_start();
-@include 'config.php';
+
+$conn = Database::connect();
+$product = new Product($conn);
+$user;
+
+// Check if the user is logged in
+if (isset($_SESSION['id'])) {
+    // Resolve user information
+    $user = new User($conn);
+    $user->id = intval($_SESSION['id']);
+    $user->read_single();
+
+    $cart = new Cart($conn);
+    $cart->user_id = $user->id;
+} else {
+    echo '<script>alert("You must log in first"); window.location.href = "/signin.php"</script>';
+    die();
+}
 
 if (isset($_POST['update_update_btn'])) {
-    $update_value = $_POST['update_quantity'];
-    $update_id = $_POST['update_quantity_id'];
-    $update_quantity_query = mysqli_query($conn, "UPDATE `cart` SET quantity = '$update_value' WHERE id = '$update_id'");
-    if ($update_quantity_query) {
+    $update_value = intval($_POST['update_quantity']);
+    $update_id = intval($_POST['product_id']);
+
+    $cart->quantity = $update_value;
+    $cart->product_id = $update_id;
+
+    if ($cart->update()) {
         header('location:cart.php');
-    };
+    }
 };
 
 if (isset($_GET['remove'])) {
-    $remove_id = $_GET['remove'];
-    mysqli_query($conn, "DELETE FROM `cart` WHERE id = '$remove_id'");
+    $remove_id = intval($_GET['remove']);
+
+    $cart->product_id = $remove_id;
+    $cart->remove(); // TODO: Add error handler
+
     header('location:cart.php');
 };
 
 if (isset($_GET['delete_all'])) {
-    mysqli_query($conn, "DELETE FROM `cart`");
+    $cart->removeAll();
+
     header('location:cart.php');
 }
 ?>
@@ -130,33 +159,35 @@ if (isset($_GET['delete_all'])) {
 
                     <?php
 
-                    $select_cart = mysqli_query($conn, "SELECT * FROM `cart`");
+                    $items = $cart->read_by_user_full();
+
                     $grand_total = 0;
-                    if (mysqli_num_rows($select_cart) > 0) {
-                        while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+
+                    if ($items->rowCount() > 0) {
+                        while ($item = $items->fetch(PDO::FETCH_ASSOC)) {
                     ?>
                             <tr>
                                 <form action="" method="post">
-                                    <td><img src="assets/uploaded_img/<?php echo $fetch_cart['image']; ?>" height="100" alt=""></td>
-                                    <td><?php echo $fetch_cart['name']; ?></td>
-                                    <td>₱<?php echo number_format($fetch_cart['price']); ?>.00</td>
+                                    <td><img src="assets/uploaded_img/<?php echo $item['image']; ?>" height="100" alt=""></td>
+                                    <td><?php echo $item['name']; ?></td>
+                                    <td>₱<?php echo number_format($item['price']); ?>.00</td>
                                     <td>
 
-                                        <input type="hidden" name="update_quantity_id" value="<?php echo $fetch_cart['id']; ?>">
+                                        <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
 
                                         <!-- Quantity Plus & Minus -->
 
                                         <div class="input-group">
 
                                             <span class="input-group-btn">
-                                                <button type="button" id="dec-<?php echo $fetch_cart['id']; ?>" class="quantity-left-minus btn-minus btn-danger btn-number" data-type="minus" data-field="">-
+                                                <button type="button" id="dec-<?php echo $item['product_id']; ?>" class="quantity-left-minus btn-minus btn-danger btn-number" data-type="minus" data-field="">-
                                                     <span class="glyphicon glyphicon-minus"></span>
                                                 </button>
                                             </span>
-                                            <input type="text" id="quantity-<?php echo $fetch_cart['id']; ?>" name="update_quantity" class="form-control input-number" value="<?php echo $fetch_cart['quantity']; ?>" min="1">
+                                            <input type="text" id="quantity-<?php echo $item['product_id']; ?>" name="update_quantity" class="form-control input-number" value="<?php echo $item['quantity']; ?>" min="1">
                                             <span class="input-group-btn">
 
-                                                <button type="button" id="inc-<?php echo $fetch_cart['id']; ?>" class="quantity-right-plus btn-plus btn-success btn-number" name="update_update_btn" data-type="plus" data-field="">+
+                                                <button type="button" id="inc-<?php echo $item['product_id']; ?>" class="quantity-right-plus btn-plus btn-success btn-number" name="update_update_btn" data-type="plus" data-field="">+
                                                     <span class="glyphicon glyphicon-plus"></span>
                                                 </button>
                                             </span>
@@ -164,9 +195,9 @@ if (isset($_GET['delete_all'])) {
                                         <!-- End Quantity Plus & Minus -->
                                         <br>
                                     </td>
-                                    <td>₱ <?php echo $sub_total = number_format($fetch_cart['price']) * number_format($fetch_cart['quantity']); ?>.00</td>
+                                    <td>₱ <?php echo $sub_total = number_format($item['price']) * number_format($item['quantity']); ?>.00</td>
                                     <td class="update-td"><input type="submit" value="Update" name="update_update_btn" class="btn-update btn-warning"> </td>
-                                    <td> <a href="cart.php?remove=<?php echo $fetch_cart['id']; ?>" onclick="return confirm('Remove item from cart?')" class="btn-delete btn-danger" style="margin-left: -13px; font-size: 18px; text-align: center; padding-right: 13px; margin-top: -15px;"> </i> Delete</a>
+                                    <td> <a href="cart.php?remove=<?php echo $item['product_id']; ?>" onclick="return confirm('Remove item from cart?')" class="btn-delete btn-danger" style="margin-left: -13px; font-size: 18px; text-align: center; padding-right: 13px; margin-top: -15px;"> </i> Delete</a>
                                     </td>
                                 </form>
 
@@ -178,7 +209,7 @@ if (isset($_GET['delete_all'])) {
                     ?>
 
                     <tr class="table-bottom">
-                        <td><a href="shop_1.php" class="btn-continue btn-warning">Continue Shopping</a></td>
+                        <td><a href="/shop.php" class="btn-continue btn-warning">Continue Shopping</a></td>
                         <td colspan="3">GRAND TOTAL</td>
                         <td>₱<?php echo $grand_total; ?>.00</td>
                         <td></td>
@@ -189,13 +220,11 @@ if (isset($_GET['delete_all'])) {
                 </tbody>
             </table>
             <br>
-            <center>
-                <div class="horizontal-center">
-                    <button class="checkout-btn">
-                        <a href="checkout.php" <?= ($grand_total > 1) ? '' : 'disabled'; ?>><span>Proceed to Checkout</span>
-                    </button>
-                </div>
-            </center>
+            <div class="horizontal-center" style="text-align:center">
+                <button class="checkout-btn">
+                    <a href="/checkout.php" <?= ($grand_total > 1) ? '' : 'disabled'; ?>><span>Proceed to Checkout</span>
+                </button>
+            </div>
         </section>
     </div>
     <br>

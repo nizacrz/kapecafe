@@ -1,4 +1,5 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/string.php';
 
 class Product
 {
@@ -48,7 +49,7 @@ class Product
 
     public function read_single()
     {
-        $query = "SELECT * FROM {$this->DB_TABLE} WHERE user_id = ?";
+        $query = "SELECT * FROM {$this->DB_TABLE} WHERE id = ?";
 
         $stmt = $this->conn->prepare($query);
 
@@ -132,9 +133,24 @@ class Product
             $stmt->bindParam(':image', $this->image);
         }
 
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+        return $stmt->execute();
+    }
+
+    public function check_if_exists($id)
+    {
+        $query = "SELECT * FROM {$this->DB_TABLE} WHERE id = ?";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Clean data
+        $id = Str::sanitizeInt($id);
+
+        // Bind Parameters
+        $stmt->bindParam(1, $id);
+
+        // Execute query
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0);
     }
 }

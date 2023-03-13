@@ -2,7 +2,7 @@
 
 function html_header($title = 'Kapecafé')
 {
-    echo <<<HTML
+    echo "
         <!DOCTYPE html>
         <html lang='en'>
     
@@ -24,21 +24,21 @@ function html_header($title = 'Kapecafé')
     
             <link rel='icon' href='/assets/logo/Icon.png'>
         </head>
-    HTML;
+    ";
 }
 
 function html_footer()
 {
-    echo <<<HTML
+    echo "
     <footer>
         <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script>, KapeCafé</p>
     </footer>
-    HTML;
+    ";
 }
 
 function html_footer_scripts()
 {
-    echo <<<HTML
+    echo '
     <!-- jquery  -->
     <script src="/assets/scripts/jquery-3.5.1.min.js" defer></script>
     <!-- bootstrap -->
@@ -75,12 +75,12 @@ function html_footer_scripts()
     <script src="/assets/scripts/smooth-scroll.js" defer></script>
     <!-- custom js  -->
     <script src="/assets/scripts/main.js" defer></script>
-    HTML;
+    ';
 }
 
 function html_maintenance_header()
 {
-    return <<<HTML
+    return "
     <header class='header'>
         <div class='flex'>
             <a href='#' class='logo'>kapecafé</a>
@@ -94,7 +94,7 @@ function html_maintenance_header()
             </nav>
         </div>
     </header>
-    HTML;
+    ";
 }
 
 function html_navbar($is_logged_in = false)

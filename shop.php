@@ -3,6 +3,7 @@ include_once './shared/general.php';
 include_once './services/config/Database.php';
 include_once './services/models/Product.php';
 include_once './services/models/User.php';
+include_once './services/models/Cart.php';
 
 
 session_start();
@@ -18,22 +19,32 @@ if (isset($_SESSION['id'])) {
 }
 
 if (isset($_POST['add_to_cart'])) {
+
+    $msg;
+
     if (isset($user)) {
-        // Instantiate a cart
-        // Define cart attributes
-        // CREATE ITEM OR INSERT OR UPDATE
-        $product_quantity = 1;
+        $cart = new Cart($conn);
 
-        $select_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_name'");
+        $cart->user_id = $user->id;
+        $cart->product_id = $_POST['add_to_cart'];
+        $cart->quantity = 1;
 
-        if (mysqli_num_rows($select_cart) > 0) {
-            echo '<script>alert("Product already added to cart")</script>';
+        // Is the product recorded in the database?
+        if ($product->check_if_exists($cart->product_id)) {
+            if ($cart->check_if_product_exists($cart->product_id)) {
+                // Product exists in cart. Increment quantity
+                $cart->increment_product_quantity();
+            } else {
+                $cart->insert();
+            }
+            $msg = '<script>alert("Product added to cart succesfully")</script>';
         } else {
-            $insert_product = mysqli_query($conn, "INSERT INTO `cart`(name, price, image, quantity) VALUES('$product_name', '$product_price', '$product_image', '$product_quantity')");
-            echo '<script>alert("Product added to cart succesfully")</script>';
+            $msg = '<script>alert("An unknown error has occurred.")</script>';
         }
+    } else {
+        $msg = '<script>alert("You must log in first"); window.location.href = "/signin.php"</script>';
     }
-    echo '<script>alert("You must log in first"); window.location.href = "/signin.php"</script>';
+    echo $msg;
 }
 
 $category;
@@ -110,7 +121,14 @@ if (isset($category)) {
 
 <body>
     <?php
-    html_searchbar(isset($user))
+
+    if (isset($user)) {
+        $cart_check = new Cart($conn);
+        $cart_check->user_id = $user->id;
+        $cart_stmt = $cart_check->read_by_user();
+        $cart_count = $cart_stmt->rowCount();
+    }
+    html_searchbar(isset($user), isset($cart_count) ? $cart_count : NULL)
     ?>
     <!-- products content -->
     <div class="bg-main">
