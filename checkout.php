@@ -4,12 +4,13 @@ include_once './services/config/Database.php';
 include_once './services/models/Product.php';
 include_once './services/models/User.php';
 include_once './services/models/Cart.php';
+include_once './services/models/Order.php';
 
 session_start();
 
 $conn = Database::connect();
 $product = new Product($conn);
-$cart = new Cart($conn);
+$cart;
 $user;
 
 // Check if the user is logged in
@@ -40,20 +41,35 @@ if (isset($_POST['order_btn'])) {
     $country = $_POST['country'];
     $pin_code = $_POST['pin_code'];
 
-    $cart_query = mysqli_query($conn, "SELECT * FROM `cart`");
+    $cart_query = $cart->read_by_user_full();
     $price_total = 0;
-    if (mysqli_num_rows($cart_query) > 0) {
-        while ($product_item = mysqli_fetch_assoc($cart_query)) {
+    if ($cart_query->rowCount() > 0) {
+        while ($product_item = $cart_query->fetch(PDO::FETCH_ASSOC)) {
             $product_name[] = $product_item['name'] . ' (' . $product_item['quantity'] . ') ';
-            $product_price = number_format($product_item['price'] * $product_item['quantity']);
+            $product_price = $product_item['price'] * $product_item['quantity'];
             $price_total += $product_price;
         };
     };
 
     $total_product = implode(', ', $product_name);
-    $detail_query = mysqli_query($conn, "INSERT INTO `order`(name, number, email, method, flat, street, city, state, country, pin_code, total_products, total_price) VALUES('$name','$number','$email','$method','$flat','$street','$city','$state','$country','$pin_code','$total_product','$price_total')") or die('Query failed');
 
-    if ($cart_query && $detail_query) {
+    $order = new Order($conn);
+    $order->name = $name;
+    $order->number = $number;
+    $order->email = $email;
+    $order->method = $method;
+    $order->flat = $flat;
+    $order->street = $street;
+    $order->city = $city;
+    $order->state = $state;
+    $order->country = $country;
+    $order->pin_code = $pin_code;
+    $order->total_products = $total_product;
+    $order->total_price = number_format($price_total);
+
+    $order_success = $order->create();
+
+    if ($order_success) {
         echo "
       <div class='order-message-container'>
       <div class='message-container'>
@@ -210,7 +226,7 @@ if (isset($_POST['order_btn'])) {
     </div>
 
     <!-- footer -->
-    <div><?php include 'footer.php'; ?></div>
+    <div><?php html_footer(); ?></div>
     <!-- end footer -->
 
 </body>
