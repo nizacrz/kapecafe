@@ -1,6 +1,10 @@
 <?php
 include '../config.php';
 
+/**
+ * For Cleanup & Merge to maintenance.php 🏴
+ */
+
 if (isset($_GET['delete'])) {
     $delete_id = $_GET['delete'];
     $delete_query = mysqli_query($conn, "DELETE FROM `products` WHERE id = $delete_id ") or die('query failed');
@@ -57,15 +61,11 @@ if (isset($_POST['update_product'])) {
 
 <body>
     <?php include 'header.php'; ?>
-
     <div class="container">
- 
         <section class="display-product-table">
-        <h1>All Products</h1>
-          
+            <h1>All Products</h1>
             <a href="add_product.php" class="option-btn" style="width: 223px; padding-top: 15px; margin-bottom: 20px;"> <i class="fa-solid fa-plus"></i></i> Add New Product </a>
             <table>
-
                 <thead>
                     <th>Image</th>
                     <th>Categories</th>
@@ -74,10 +74,12 @@ if (isset($_POST['update_product'])) {
                     <th>Price</th>
                     <th>action</th>
                 </thead>
-
                 <tbody>
                     <?php
-                    $select_products = mysqli_query($conn, "SELECT * FROM `products` ORDER BY RAND()");
+                    /**
+                     * Conversion to PHP Data Object (PDO) style ongoing 09-01-23  🚩
+                     */
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` ORDER BY `name` ASC");
                     if (mysqli_num_rows($select_products) > 0) {
                         while ($row = mysqli_fetch_assoc($select_products)) {
                     ?>
@@ -108,7 +110,9 @@ if (isset($_POST['update_product'])) {
         <section class="edit-form-container">
 
             <?php
-
+            /**
+             * Conversion to PHP Data Object (PDO) style ongoing 09-01-23  🚩
+             */
             if (isset($_GET['edit'])) {
                 $edit_id = $_GET['edit'];
                 $edit_query = mysqli_query($conn, "SELECT * FROM `products` WHERE id = $edit_id");

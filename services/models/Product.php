@@ -136,6 +136,23 @@ class Product
         return $stmt->execute();
     }
 
+    /**
+     * This function deletes the product using its id
+     */
+    public function delete()
+    {
+        $query = "DELETE FROM {$this->DB_TABLE} WHERE
+            id = :product_id
+        ";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':product_id', $this->id);
+
+        return $stmt->execute();
+    }
+
+
     public function check_if_exists($id)
     {
         $query = "SELECT * FROM {$this->DB_TABLE} WHERE id = ?";

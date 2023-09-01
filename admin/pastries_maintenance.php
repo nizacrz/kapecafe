@@ -1,6 +1,10 @@
 <?php
 include '../config.php';
 
+/**
+ * For Cleanup & Merge to maintenance.php 🏴
+ */
+
 if (isset($_GET['delete'])) {
     $delete_id = $_GET['delete'];
     $delete_query = mysqli_query($conn, "DELETE FROM `products` WHERE id = $delete_id ") or die('query failed');
@@ -61,7 +65,7 @@ if (isset($_POST['update_product'])) {
     <div class="container">
 
         <section class="display-product-table">
-        <h1>Filipino Pastries</h1>
+            <h1>Filipino Pastries</h1>
             <a href="add_product.php" class="option-btn" style="width: 223px; padding-top: 15px; margin-bottom: 20px;"> <i class="fa-solid fa-plus"></i></i> Add New Product </a>
             <table>
 

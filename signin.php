@@ -2,11 +2,18 @@
 include_once './services/config/Database.php';
 include_once './services/models/User.php';
 
+/**
+ * WARN: This uses HTML4 Tags 🚩
+ */
 
 session_start();
 
 $user;
 
+/**
+ * If session ID exists then the user is signed in and the application
+ * will reroute to index.php
+ */
 if (isset($_SESSION['id'])) {
     $user = new User(Database::connect());
     $user->id = intval($_SESSION['id']);
