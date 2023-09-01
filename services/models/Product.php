@@ -47,6 +47,22 @@ class Product
         return $stmt;
     }
 
+    public function read_by_category()
+    {
+        $query = "SELECT * FROM {$this->DB_TABLE} WHERE category = ?";
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind Category as Parameter
+        $stmt->bindParam(1, $this->category);
+
+        // Execute Query
+        $stmt->execute();
+
+        return $stmt;
+    }
+
     public function read_single()
     {
         $query = "SELECT * FROM {$this->DB_TABLE} WHERE id = ?";
@@ -128,6 +144,50 @@ class Product
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':price', $this->price);
+
+        if (isset($this->image)) {
+            $stmt->bindParam(':image', $this->image);
+        }
+
+        return $stmt->execute();
+    }
+
+    public function update()
+    {
+        $query = "UPDATE {$this->DB_TABLE} SET
+        category = :category,
+        name = :name,
+        description = :description,
+        price = :price";
+
+        // Insert an update value for image
+        if (isset($this->image)) {
+            $query = $query . ", image = :image";
+        }
+
+        // End the SQL Query
+        $query = $query . " WHERE id = :id";
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Clean data
+        $this->id = Str::sanitizeInt($this->id);
+        $this->category = Str::sanitizeString($this->category);
+        $this->name = Str::sanitizeString($this->name);
+        $this->description = Str::sanitizeString($this->description);
+        $this->price = Str::sanitizeDouble($this->price);
+
+        if (isset($this->image)) {
+            $this->image = Str::sanitizeString($this->image);
+        }
+
+        // Bind data
+        $stmt->bindParam(':category', $this->category);
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':price', $this->price);
+        $stmt->bindParam(':id', $this->id);
 
         if (isset($this->image)) {
             $stmt->bindParam(':image', $this->image);

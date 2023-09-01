@@ -58,7 +58,7 @@ if (isset($_POST["createAccount"])) {
         if ($user->login()) {
             $_SESSION['id'] = $user->id;
             if ($user->role === "Admin") {
-                header('Location: /admin/product_maintenance.php');
+                header('Location: /admin/maintenance.php');
                 die();
             } else {
                 header('Location: /index.php');

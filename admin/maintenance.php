@@ -1,6 +1,7 @@
 <?php
 
 include '../config.php';
+include_once '../shared/general.php';
 include_once '../services/config/Database.php';
 include_once '../services/models/User.php';
 include_once '../services/models/Product.php';
@@ -28,23 +29,32 @@ if (isset($_SESSION['id'])) {
     die();
 }
 
+/**
+ * This is the Product Data Object.
+ * This variable is used for initiating CRUD Requests
+ * and for updating the database.
+ */
 $product = new Product(Database::connect());
 
 /**
- * Delete request??
+ * Delete request receives the product ID
+ * then a delete request is executed.
  */
 if (isset($_GET['delete'])) {
 
+    $delete_id = intval($_GET['delete']);
 
-    $delete_id = $_GET['delete'];
+    $product->id = $delete_id;
+    $delete_result = $product->delete();
 
-    $delete_query = mysqli_query($conn, "DELETE FROM `products` WHERE id = $delete_id ") or die('query failed');
-    if ($delete_query) {
-        header('location:product_maintenance.php');
+    if ($delete_result) {
+        header('location:maintenance.php');
         $message[] = 'product has been deleted';
+        die();
     } else {
-        header('location:product_maintenance.php');
+        header('location:maintenance.php');
         $message[] = 'product could not be deleted';
+        die();
     };
 };
 
@@ -52,26 +62,44 @@ if (isset($_GET['delete'])) {
  * Update Request
  */
 if (isset($_POST['update_product'])) {
-    $update_p_id = $_POST['update_p_id'];
-    $update_p_category = $_POST['update_p_category'];
-    $update_p_name = $_POST['update_p_name'];
-    $update_p_description = $_POST['update_p_description'];
-    $update_p_price = $_POST['update_p_price'];
-    $update_p_image = $_FILES['update_p_image']['name'];
-    $update_p_image_tmp_name = $_FILES['update_p_image']['tmp_name'];
-    $update_p_image_folder = '../assets/uploaded_img/' . $update_p_image;
 
-    $update_query = mysqli_query($conn, "UPDATE `products` SET name = '$update_p_name', price = '$update_p_price', image = '$update_p_image' WHERE id = '$update_p_id'");
+    // Resolve all information into Product PDO
+    $product->id = intval($_POST['update_p_id']);
+    $product->category = $_POST['update_p_category'];
+    $product->name = $_POST['update_p_name'];
+    $product->description = $_POST['update_p_description'];
+    $product->price = $_POST['update_p_price'];
+
+    // Check if an image was uploaded
+    if (isset($_FILES['update_p_image']) && $_FILES['update_p_image']['error'] === UPLOAD_ERR_OK) {
+        // Create a new name for the image
+        $uploaded_image = $_FILES['update_p_image'];
+        $product_image_name = md5_file($uploaded_image['tmp_name']) . '.' . pathinfo($uploaded_image['name'], PATHINFO_EXTENSION);
+
+        $product->image = $product_image_name;
+    }
+
+    // Execute the update query
+    $update_query = $product->update();
 
     if ($update_query) {
-        move_uploaded_file($update_p_image_tmp_name, $update_p_image_folder);
-        $message[] = 'product updated succesfully';
-        header('location:product_maintenance.php');
+        // Successful update
+        if (isset($uploaded_image)) {
+            $update_p_image_folder = '../assets/uploaded_img/' . $product_image_name;
+
+            move_uploaded_file($uploaded_image['tmp_name'], $update_p_image_folder);
+        }
+        header('location:maintenance.php');
     } else {
-        $message[] = 'product could not be updated';
-        header('location:product_maintenance.php');
+        // Failed to update
+        header('location:maintenance.php');
     }
 }
+
+if (isset($_GET['category'])) {
+    $category = $_GET['category'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -94,12 +122,14 @@ if (isset($_POST['update_product'])) {
 </head>
 
 <body>
-    <?php include 'header.php'; ?>
+    <?php html_maintenance_header(); ?>
 
     <div class="container">
 
         <section class="display-product-table">
-            <h1>All Products</h1>
+            <h1><?php
+                echo isset($category) ? $category : "All Products";
+                ?></h1>
             <a href="add_product.php" class="option-btn" style="width: 223px; padding-top: 15px; margin-bottom: 20px;"> <i class="fa-solid fa-plus"></i></i> Add New Product </a>
             <table>
                 <thead>
@@ -112,7 +142,13 @@ if (isset($_POST['update_product'])) {
                 </thead>
                 <tbody>
                     <?php
-                    $results = $product->read($size = 0);
+
+                    if (isset($category)) {
+                        $product->category = $category;
+                        $results = $product->read_by_category();
+                    } else {
+                        $results = $product->read($size = 0);
+                    }
 
                     if ($results->rowCount() > 0) {
                         while ($product_data = $results->fetch(PDO::FETCH_ASSOC)) {
@@ -138,44 +174,38 @@ if (isset($_POST['update_product'])) {
             </table>
         </section>
         <section class="edit-form-container">
-
             <?php
-
             if (isset($_GET['edit'])) {
-                $edit_id = $_GET['edit'];
-                $edit_query = mysqli_query($conn, "SELECT * FROM `products` WHERE id = $edit_id");
-                if (mysqli_num_rows($edit_query) > 0) {
-                    while ($fetch_edit = mysqli_fetch_assoc($edit_query)) {
+                $edit_id = intval($_GET['edit']);
+
+                $product->id = $edit_id;
+                $edit_result = $product->read_single();
+                if ($edit_result->rowCount() > 0) {
+                    $product_info = $edit_result->fetch(PDO::FETCH_ASSOC);
             ?>
 
-                        <form action="" method="post" enctype="multipart/form-data">
-                            <img src="../assets/uploaded_img/<?php echo $fetch_edit['image']; ?>" height="200" alt="">
-                            <input type="hidden" name="update_p_id" value="<?php echo $fetch_edit['id']; ?>">
-                            <input type="text" class="box" required name="update_p_category" value="<?php echo $fetch_edit['category']; ?>">
-                            <input type="text" class="box" required name="update_p_name" value="<?php echo $fetch_edit['name']; ?>">
-                            <input type="text" class="box" required name="update_p_description" value="<?php echo $fetch_edit['description']; ?>">
-                            <input type="number" min="0" class="box" required name="update_p_price" value="<?php echo $fetch_edit['price']; ?>">
-                            <input type="file" class="box" name="update_p_image" accept="image/png, image/jpg, image/jpeg">
-                            <input type="submit" value="update the product" name="update_product" class="btn">
-                            <a class="option-btn" href="product_maintenance.php" role="button"> Cancel </a>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <img src="../assets/uploaded_img/<?php echo $product_info['image']; ?>" height="200" alt="">
+                        <input type="hidden" name="update_p_id" value="<?php echo $product_info['id']; ?>">
+                        <input type="text" class="box" required name="update_p_category" value="<?php echo $product_info['category']; ?>">
+                        <input type="text" class="box" required name="update_p_name" value="<?php echo $product_info['name']; ?>">
+                        <input type="text" class="box" required name="update_p_description" value="<?php echo $product_info['description']; ?>">
+                        <input type="number" min="0" class="box" required name="update_p_price" value="<?php echo $product_info['price']; ?>">
+                        <input type="file" class="box" name="update_p_image" accept="image/png, image/jpg, image/jpeg">
+                        <input type="submit" value="update the product" name="update_product" class="btn">
+                        <a class="option-btn" href="product_maintenance.php" role="button"> Cancel </a>
 
-                        </form>
+                    </form>
 
             <?php
-                    };
                 };
                 echo "<script>document.querySelector('.edit-form-container').style.display = 'flex';</script>";
             };
             ?>
-
         </section>
-
     </div>
-
-
-    <!-- custom js file link  -->
-    <script src="js/script.js"></script>
-    <div><?php include '../footer.php'; ?></div>
+    <div><?php html_footer();
+            html_footer_scripts(); ?></div>
 </body>
 
 </html>
