@@ -1,6 +1,5 @@
 <?php
 
-include '../config.php';
 include_once '../shared/general.php';
 include_once '../services/config/Database.php';
 include_once '../services/models/User.php';

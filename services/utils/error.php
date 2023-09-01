@@ -1,6 +1,6 @@
 <?php
 
-include __DIR__ . '/../../shared/general.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/shared/general.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
