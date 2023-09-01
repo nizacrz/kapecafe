@@ -48,22 +48,54 @@ if (isset($_GET['delete'])) {
     $delete_result = $product->delete();
 
     if ($delete_result) {
-        header('location:maintenance.php');
-        $message[] = 'product has been deleted';
+        header('location:maintenance.php?message=success_delete');
         die();
     } else {
-        header('location:maintenance.php');
-        $message[] = 'product could not be deleted';
+        header('location:maintenance.php?message=failed_delete');
         die();
     };
 };
+
+if (isset($_POST['add_product'])) {
+
+    // Resolve all data into Product PDO
+    $product->category = $_POST['category'];
+    $product->name = $_POST['name'];
+    $product->description = $_POST['description'];
+    $product->price = $_POST['price'];
+
+    // Check if an image was uploaded
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        // Create a new name for the image
+        $uploaded_image = $_FILES['image'];
+        $product_image_name = md5_file($uploaded_image['tmp_name']) . '.' . pathinfo($uploaded_image['name'], PATHINFO_EXTENSION);
+
+        $product->image = $product_image_name;
+    }
+
+    // Execute the create query
+    $create_query = $product->create_product();
+
+    if ($create_query) {
+        // Successful create
+        if (isset($uploaded_image)) {
+            $update_p_image_folder = '../assets/uploaded_img/' . $product_image_name;
+
+            move_uploaded_file($uploaded_image['tmp_name'], $update_p_image_folder);
+        }
+        header('Location:maintenance.php?message=success_create');
+    } else {
+        // Creation Failed
+        header('location:maintenance.php?message=failed_create');
+    }
+}
 
 /**
  * Update Request
  */
 if (isset($_POST['update_product'])) {
 
-    // Resolve all information into Product PDO
+    // Resolve all data into Product PDO
     $product->id = intval($_POST['update_p_id']);
     $product->category = $_POST['update_p_category'];
     $product->name = $_POST['update_p_name'];
@@ -89,10 +121,10 @@ if (isset($_POST['update_product'])) {
 
             move_uploaded_file($uploaded_image['tmp_name'], $update_p_image_folder);
         }
-        header('location:maintenance.php');
+        header('location:maintenance.php?message=success_update');
     } else {
         // Failed to update
-        header('location:maintenance.php');
+        header('location:maintenance.php?message=failed_update');
     }
 }
 
@@ -130,7 +162,7 @@ if (isset($_GET['category'])) {
             <h1><?php
                 echo isset($category) ? $category : "All Products";
                 ?></h1>
-            <a href="add_product.php" class="option-btn" style="width: 223px; padding-top: 15px; margin-bottom: 20px;"> <i class="fa-solid fa-plus"></i></i> Add New Product </a>
+            <a href="maintenance.php?create" class="option-btn" style="width: 223px; padding-top: 15px; margin-bottom: 20px;"> <i class="fa-solid fa-plus"></i></i> Add New Product </a>
             <table>
                 <thead>
                     <th>Image</th>
@@ -193,19 +225,67 @@ if (isset($_GET['category'])) {
                         <input type="number" min="0" class="box" required name="update_p_price" value="<?php echo $product_info['price']; ?>">
                         <input type="file" class="box" name="update_p_image" accept="image/png, image/jpg, image/jpeg">
                         <input type="submit" value="update the product" name="update_product" class="btn">
-                        <a class="option-btn" href="product_maintenance.php" role="button"> Cancel </a>
-
+                        <a class="option-btn" href="maintenance.php" role="button"> Cancel </a>
                     </form>
 
-            <?php
+                <?php
                 };
                 echo "<script>document.querySelector('.edit-form-container').style.display = 'flex';</script>";
-            };
+            } else if (isset($_GET['create'])) {
+                ?>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <h1 style="font-size: 3em !important">add a new product</h1>
+                    <input type="file" class="box" name="image" accept="image/png, image/jpg, image/jpeg" class="box" required>
+                    <input type="text" class="box" name="category" placeholder="enter the product category" class="box" required>
+                    <input type="text" class="box" name="name" placeholder="enter the product name" class="box" required>
+                    <input type="text" class="box" name="description" placeholder="enter the product description" class="box" required>
+                    <input type="number" class="box" name="price" min="0" placeholder="enter the product price" class="box" required>
+                    <input type="submit" value="add the product" name="add_product" class="btn">
+                    <a class="option-btn" href="maintenance.php" role="button"> Cancel </a>
+                </form>
+            <?php
+                echo "<script>document.querySelector('.edit-form-container').style.display = 'flex';</script>";
+            }
             ?>
         </section>
     </div>
     <div><?php html_footer();
-            html_footer_scripts(); ?></div>
+            html_footer_scripts();
+
+            if (isset($_GET['message'])) {
+                /**
+                 * Devnote: Too lazy to make a solution that is more
+                 * scalable than whatever this is.
+                 */
+                switch ($_GET['message']) {
+                    case 'success_create':
+                        echo "<script>alert('Created Successfully!');</script>";
+
+                        break;
+                    case 'failed_create':
+                        echo "<script>alert('Failed to Create!');</script>";
+
+                        break;
+                    case 'success_update':
+                        echo "<script>alert('Updated Successfully!');</script>";
+
+                        break;
+                    case 'failed_update':
+                        echo "<script>alert('Failed to Update!');</script>";
+
+                        break;
+                    case 'success_delete':
+                        echo "<script>alert('Deleted Successfully!');</script>";
+
+                        break;
+                    case 'failed_delete':
+                        echo "<script>alert('Failed to Delete!');</script>";
+
+                        break;
+                    default:
+                        break;
+                }
+            } ?></div>
 </body>
 
 </html>
