@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/string.php';
+// include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/string.php';
 
 class User
 {
@@ -122,11 +122,11 @@ class User
         $stmt = $this->conn->prepare($query);
 
         // Clean data
-        $this->first_name = Str::sanitizeString($this->first_name);
-        $this->last_name = Str::sanitizeString($this->last_name);
-        $this->username = Str::sanitizeString($this->username);
-        $this->email = Str::sanitizeString($this->email);
-        $this->role = Str::sanitizeString($this->role);
+        $this->first_name = $this->first_name;
+        $this->last_name = $this->last_name;
+        $this->username = $this->username;
+        $this->email = $this->email;
+        $this->role = $this->role;
 
         // Hash + Salt password
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
