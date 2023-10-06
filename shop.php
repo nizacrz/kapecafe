@@ -5,7 +5,6 @@ include_once './services/models/Product.php';
 include_once './services/models/User.php';
 include_once './services/models/Cart.php';
 
-
 session_start();
 
 $conn = Database::connect();
@@ -52,12 +51,13 @@ $index_size = 1;
 $page = 1;
 $stmt;
 
+//Removed Sanitation
 if (isset($_GET['category'])) {
-    $category = str::sanitizeString($_GET['category']);
+    $category = $_GET['category'];
 }
 
 if (isset($_GET['page'])) {
-    $page = intval(str::sanitizeInt($_GET['page']));
+    $page = intval(($_GET['page']);
 }
 
 $nextPage = $page + 1;
