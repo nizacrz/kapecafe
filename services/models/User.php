@@ -121,13 +121,6 @@ class User
         // Prepare statement
         $stmt = $this->conn->prepare($query);
 
-        // Clean data
-        $this->first_name = $this->first_name;
-        $this->last_name = $this->last_name;
-        $this->username = $this->username;
-        $this->email = $this->email;
-        $this->role = $this->role;
-
         // Hash + Salt password
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
 
