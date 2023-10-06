@@ -1,8 +1,6 @@
 <?php
 class Str
 {
-
-
     // Turns strings into uppercase (used in genres and authors)
     public static function toUpperCamelCase($raw)
     {
