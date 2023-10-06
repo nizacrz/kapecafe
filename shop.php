@@ -57,7 +57,7 @@ if (isset($_GET['category'])) {
 }
 
 if (isset($_GET['page'])) {
-    $page = intval(($_GET['page']);
+    $page = intval($_GET['page']);
 }
 
 $nextPage = $page + 1;

@@ -1,5 +1,4 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/string.php';
 
 class Product
 {
@@ -129,16 +128,6 @@ class Product
         // Prepare statement
         $stmt = $this->conn->prepare($query);
 
-        // Clean data
-        $this->category = Str::sanitizeString($this->category);
-        $this->name = Str::sanitizeString($this->name);
-        $this->description = Str::sanitizeString($this->description);
-        $this->price = Str::sanitizeDouble($this->price);
-
-        if (isset($this->image)) {
-            $this->image = Str::sanitizeString($this->image);
-        }
-
         // Bind data
         $stmt->bindParam(':category', $this->category);
         $stmt->bindParam(':name', $this->name);
@@ -170,17 +159,6 @@ class Product
 
         // Prepare statement
         $stmt = $this->conn->prepare($query);
-
-        // Clean data
-        $this->id = Str::sanitizeInt($this->id);
-        $this->category = Str::sanitizeString($this->category);
-        $this->name = Str::sanitizeString($this->name);
-        $this->description = Str::sanitizeString($this->description);
-        $this->price = Str::sanitizeDouble($this->price);
-
-        if (isset($this->image)) {
-            $this->image = Str::sanitizeString($this->image);
-        }
 
         // Bind data
         $stmt->bindParam(':category', $this->category);
@@ -218,9 +196,6 @@ class Product
         $query = "SELECT * FROM {$this->DB_TABLE} WHERE id = ?";
 
         $stmt = $this->conn->prepare($query);
-
-        // Clean data
-        $id = Str::sanitizeInt($id);
 
         // Bind Parameters
         $stmt->bindParam(1, $id);
