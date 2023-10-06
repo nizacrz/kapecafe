@@ -1,7 +1,7 @@
 
 
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/string.php';
+// include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/string.php';
 class Cart
 {
     private $conn;
@@ -58,9 +58,9 @@ class Cart
         $stmt = $this->conn->prepare($query);
 
         // Clean data
-        $this->user_id = Str::sanitizeInt($this->user_id);
-        $this->product_id = Str::sanitizeInt($this->product_id);
-        $this->quantity = Str::sanitizeInt($this->quantity);
+        $this->user_id = $this->user_id;
+        $this->product_id = $this->product_id;
+        $this->quantity = $this->quantity;
 
         // Bind Data
         $stmt->bindParam(':user_id', $this->user_id);
@@ -80,9 +80,9 @@ class Cart
         $stmt = $this->conn->prepare($query);
 
         // Clean data
-        $this->user_id = Str::sanitizeInt($this->user_id);
-        $this->product_id = Str::sanitizeInt($this->product_id);
-        $this->quantity = Str::sanitizeInt($this->quantity);
+        $this->user_id = $this->user_id;
+        $this->product_id = $this->product_id;
+        $this->quantity = $this->quantity;
 
         // Bind Data
         $stmt->bindParam(':quantity', $this->quantity);
@@ -128,8 +128,8 @@ class Cart
         $stmt = $this->conn->prepare($query);
 
         // Clean data
-        $this->user_id = Str::sanitizeInt($this->user_id);
-        $this->product_id = Str::sanitizeInt($this->product_id);
+        $this->user_id = $this->user_id;
+        $this->product_id = $this->product_id;
 
         // Bind Data
         $stmt->bindParam(':id', $this->user_id);
@@ -144,7 +144,7 @@ class Cart
 
         $stmt = $this->conn->prepare($query);
 
-        $product_id = Str::sanitizeInt($product_id);
+        $product_id = $product_id;
 
         $stmt->bindParam(1, $product_id);
         $stmt->bindParam(2, $this->user_id);
