@@ -63,8 +63,7 @@ if (isset($_SESSION['id'])) {
                     <input type="email" required placeholder="email" name="email">
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" required placeholder="password" name="password" pattern="(?=.*\d)(?=.*[\W_]).{7,}" title="Minimum of 7 characters. Should have at least one special character and one number.">
-                    <i class="fa-regular fa-eye-slash" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>
+                    <input type="password" id="password" required placeholder="password" name="password">
                 </div>
 
                 <div class="input-group">
