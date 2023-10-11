@@ -62,10 +62,6 @@ if (isset($_SESSION['id'])) {
                 <div class="input-group">
                     <input type="text" required placeholder="username" name="username">
                 </div>
-                <div class="input-group">
-                    <input type="password" id="password" required placeholder="password" name="password" pattern="(?=.*\d)(?=.*[\W_]).{7,}" title="Minimum of 7 characters. Should have at least one special character and one number.">
-                    <i class="fa-regular fa-eye-slash" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>
-                </div>
 
                 <div class="input-group">
                     <button name="submit" class="btn" value="register now">Log In</button>
