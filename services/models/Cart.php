@@ -127,10 +127,6 @@ class Cart
 
         $stmt = $this->conn->prepare($query);
 
-        // Clean data
-        $this->user_id = $this->user_id;
-        $this->product_id = $this->product_id;
-
         // Bind Data
         $stmt->bindParam(':id', $this->user_id);
         $stmt->bindParam(':pid', $this->product_id);

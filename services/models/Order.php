@@ -47,19 +47,6 @@ class Order
 
         $stmt = $this->conn->prepare($query);
 
-        $this->name = Str::sanitizeString($this->name);
-        $this->number = Str::sanitizeInt($this->number);
-        $this->email = Str::sanitizeEmail($this->email);
-        $this->method = Str::sanitizeString($this->method);
-        $this->flat = Str::sanitizeString($this->flat);
-        $this->street = Str::sanitizeString($this->street);
-        $this->city = Str::sanitizeString($this->city);
-        $this->state = Str::sanitizeString($this->state);
-        $this->country = Str::sanitizeString($this->country);
-        $this->pin_code = Str::sanitizeInt($this->pin_code);
-        $this->total_products = Str::sanitizeString($this->total_products);
-        $this->total_price = Str::sanitizeInt($this->total_price);
-
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':number', $this->number);
         $stmt->bindParam(':email', $this->email);
