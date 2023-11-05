@@ -35,19 +35,22 @@ html_header();
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="banner-text">
-                                    <?php echo isset($user) ? "<h2> Hi, " . $user->username .  "!</h2>" : "";
+                                    <?php echo isset($user) ? "<h2> Hi, " . $user->username . "!</h2>" : "";
                                     ?>
                                     <h1 class="h1-title">
                                         Welcome to
                                         <span>kapecafé</span>
                                         Shop
                                     </h1>
-                                    <p><b>kapecafé</b> is a Famous For Natural Ingredients. Our Sweet Story Began With One Goal At Heart -
-                                        To Make Every Family Celebration Truly Special By Creating Delicious And Beautiful Beverages and Pastries.
-                                        The Rest Is History, kapecafé Has Been Baking Delightful And Affordable Cafe For Filipinos.
+                                    <p><b>kapecafé</b> is a Famous For Natural Ingredients. Our Sweet Story Began With
+                                        One Goal At Heart -
+                                        To Make Every Family Celebration Truly Special By Creating Delicious And
+                                        Beautiful Beverages and Pastries.
+                                        The Rest Is History, kapecafé Has Been Baking Delightful And Affordable Cafe For
+                                        Filipinos.
                                         No Merienda No Almusal Is Complete Without <b>kapecafé</b>.</p>
                                     <div class="banner-btn mt-4">
-                                        <a href="shop_1.php" class="sec-btn">Check our Menu</a>
+                                        <a href="shop.php" class="sec-btn">Check our Menu</a>
                                     </div>
                                 </div>
                             </div>
@@ -80,14 +83,30 @@ html_header();
                 <div class="col-lg-10 m-auto">
                     <div class="book-table-img-slider" id="icon">
                         <div class="swiper-wrapper">
-                            <a href="assets/images/FT1 SIZE.png" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/FT1\ SIZE.png)"></a>
-                            <a href="assets/images/FT2 SIZE.png" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/FT2\ SIZE.png)"></a>
-                            <a href="assets/images/FT3 SIZE.png" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/FT3\ SIZE.png)"></a>
-                            <a href="assets/images/FT4 SIZE.png" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/FT4\ SIZE.png)"></a>
-                            <a href="assets/images/FT1 SIZE.png" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/FT1\ SIZE.png)"></a>
-                            <a href="assets/images/FT2 SIZE.png" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/FT2\ SIZE.png)"></a>
-                            <a href="assets/images/FT3 SIZE.png" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/FT3\ SIZE.png)"></a>
-                            <a href="assets/images/FT4 SIZE.png" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/FT4\ SIZE.png)"></a>
+                            <a href="assets/images/FT1 SIZE.png" data-fancybox="table-slider"
+                                class="book-table-img back-img swiper-slide"
+                                style="background-image: url(assets/images/FT1\ SIZE.png)"></a>
+                            <a href="assets/images/FT2 SIZE.png" data-fancybox="table-slider"
+                                class="book-table-img back-img swiper-slide"
+                                style="background-image: url(assets/images/FT2\ SIZE.png)"></a>
+                            <a href="assets/images/FT3 SIZE.png" data-fancybox="table-slider"
+                                class="book-table-img back-img swiper-slide"
+                                style="background-image: url(assets/images/FT3\ SIZE.png)"></a>
+                            <a href="assets/images/FT4 SIZE.png" data-fancybox="table-slider"
+                                class="book-table-img back-img swiper-slide"
+                                style="background-image: url(assets/images/FT4\ SIZE.png)"></a>
+                            <a href="assets/images/FT1 SIZE.png" data-fancybox="table-slider"
+                                class="book-table-img back-img swiper-slide"
+                                style="background-image: url(assets/images/FT1\ SIZE.png)"></a>
+                            <a href="assets/images/FT2 SIZE.png" data-fancybox="table-slider"
+                                class="book-table-img back-img swiper-slide"
+                                style="background-image: url(assets/images/FT2\ SIZE.png)"></a>
+                            <a href="assets/images/FT3 SIZE.png" data-fancybox="table-slider"
+                                class="book-table-img back-img swiper-slide"
+                                style="background-image: url(assets/images/FT3\ SIZE.png)"></a>
+                            <a href="assets/images/FT4 SIZE.png" data-fancybox="table-slider"
+                                class="book-table-img back-img swiper-slide"
+                                style="background-image: url(assets/images/FT4\ SIZE.png)"></a>
                         </div>
 
                         <div class="swiper-button-wp">
