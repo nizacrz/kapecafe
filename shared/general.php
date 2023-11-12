@@ -124,8 +124,8 @@ function html_navbar($is_logged_in = false)
                             </ul>
                         </nav>
                         <div class='header-right'>
-                            <form action='#' class='header-search-form for-des'>
-                                <input type='search' class='form-input' placeholder='Search Here...'>
+                            <form action='./shop.php' method='GET' class='header-search-form for-des'>
+                                <input type='search' name='q' class='form-input' placeholder='Search Here...'>
                                 <button type='submit'>
                                     <i class='uil uil-search'></i>
                                 </button>
@@ -166,10 +166,10 @@ function html_searchbar($is_logged_in = false, $cart_size = 0)
                     <a class='navbar-brand' href='#'>
                         <img src='/assets/logo/Icon.png' width='160' height='70' alt='Logo'>
                     </a>
-                    <div class='search'>
-                        <input type='text' placeholder='Search'>
-                        <i class='bx bx-search-alt'></i>
-                    </div>
+                    <form method='GET' class='search' id='searchForm'>
+                        <input name='q' type='text' placeholder='Search'>
+                        <i onclick='document.getElementById(\"searchForm\").submit();' class='bx bx-search-alt'></i>
+                    </form>
                     <ul class='user-menu'>
                         <li><a href='#'><i class='bx bx-bell'></i></a></li>
                         " . ($is_logged_in ? "

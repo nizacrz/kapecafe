@@ -47,6 +47,40 @@ class Product
         return $stmt;
     }
 
+    public function search($query, $size = 30, $index = 1, $offset = 0)
+    {
+        // Define the search query
+        $searchQuery = "SELECT * FROM {$this->DB_TABLE} WHERE 
+    name LIKE :query OR 
+    description LIKE :query";
+
+        // Add pagination if needed
+        $limit = '';
+        if ($size > 0) {
+            if ($index > 0) {
+                $offset = $index * $size - $size + $offset;
+                $limit = " LIMIT $offset, $size";
+            } else {
+                $limit = " LIMIT $offset, $size";
+            }
+        }
+
+        // Complete the query with pagination
+        $searchQuery = $searchQuery . $limit;
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($searchQuery);
+
+        // Bind parameters
+        $searchParam = "%{$query}%";
+        $stmt->bindParam(':query', $searchParam);
+
+        // Execute query
+        $stmt->execute();
+
+        return $stmt;
+    }
+
     public function read_by_category()
     {
         $query = "SELECT * FROM {$this->DB_TABLE} WHERE category = ?";

@@ -72,11 +72,19 @@ if (isset($category)) {
 
     $stmt = $product->read_products_per_category($DISPLAY_COUNT, $page);
 } else {
-    $categs = $product->read(0);
-    $categs_count = $categs->rowCount();
-    $index_size = floor($categs_count / $DISPLAY_COUNT);
+    if (isset($_GET['q'])) {
+        $searchQuery = $_GET['q'];
 
-    $stmt = $product->read($DISPLAY_COUNT, $page);
+        $categs = $product->search($searchQuery, 0);
+        $categs_count = $categs->rowCount();
+        $index_size = floor($categs_count / $DISPLAY_COUNT);
+        $stmt = $product->search($searchQuery, $DISPLAY_COUNT, $page);
+    } else {
+        $categs = $product->read(0);
+        $categs_count = $categs->rowCount();
+        $index_size = floor($categs_count / $DISPLAY_COUNT);
+        $stmt = $product->read($DISPLAY_COUNT, $page);
+    }
 }
 
 ?>
