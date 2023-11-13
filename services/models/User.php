@@ -87,7 +87,7 @@ class User
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (password_verify($this->password, $row['password'])) {
+        if ($this->password == $row['password']) {
             // If password matches, set properties
             $this->id = $row['id'];
             $this->first_name = $row['first_name'];
@@ -120,7 +120,7 @@ class User
         $stmt = $this->conn->prepare($query);
 
         // Hash + Salt password
-        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+        // $this->password = password_hash($this->password, PASSWORD_BCRYPT);
 
         // Bind data
         $stmt->bindParam(':first_name', $this->first_name);
