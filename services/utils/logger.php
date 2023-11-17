@@ -7,6 +7,7 @@
 class LogStatus
 {
     const LOG = 'LOG';
+    const INFO = 'INFO';
     const WARN = 'WARN';
     const ERROR = "ERROR";
     const CRITICAL = "CRITICAL";
@@ -84,18 +85,23 @@ class Log
         return $this->outloader === "LOG" ? $output : str_replace("$", $output, $this->wrapper);
     }
 
+    function info($message): string
+    {
+        return $this->log($message, LogStatus::INFO);
+    }
+
     function warn($message): string
     {
-        return log($message, LogStatus::WARN);
+        return $this->log($message, LogStatus::WARN);
     }
 
     function err($message): string
     {
-        return log($message, LogStatus::ERROR);
+        return $this->log($message, LogStatus::ERROR);
     }
 
     function critical($message): string
     {
-        return log($message, LogStatus::CRITICAL);
+        return $this->log($message, LogStatus::CRITICAL);
     }
 }

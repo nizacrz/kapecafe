@@ -38,7 +38,7 @@ if (isset($_SESSION['id'])) {
 
 // Initialize Singleton and Change outloader to HTML
 $log = Log::getinstance();
-$log->log("User " . $_SESSION['id'] . " connected to Console!")
+$log->info("User " . $_SESSION['id'] . " connected to Console!")
 ?>
 
 <!DOCTYPE html>
@@ -106,11 +106,13 @@ $log->log("User " . $_SESSION['id'] . " connected to Console!")
         <p>Kapecafe console v1.0.0</p>
         <div class="console-control">
             <input type="checkbox" />
-            <p>Scroll on new line</p>
-            <input type="checkbox" />
-            <p>Green</p>
-            <input type="radio" name="listen" value="log" checked>
+            <p>Gray Terminal</p>
+            <input type="radio" name="listen" value="all" checked>
+            <p>All</p>
+            <input type="radio" name="listen" value="log">
             <p>Log</p>
+            <input type="radio" name="listen" value="info">
+            <p>Info</p>
             <input type="radio" name="listen" value="warn">
             <p>Warn</p>
             <input type="radio" name="listen" value="error">
@@ -142,6 +144,29 @@ $log->log("User " . $_SESSION['id'] . " connected to Console!")
                 outputStream.forEach(value => {
                     const outputValue = document.createElement('h1');
                     outputValue.textContent = value;
+
+                    const type = value.split(" ")[0].replace(/[\[\]]/g, '');
+
+                    switch (type) {
+                        case "CRITICAL":
+                            outputValue.style.color = "#9d1dab";
+                            break;
+                        case "ERROR":
+                            outputValue.style.color = "#ad2f2f";
+                            break;
+                        case "WARN":
+                            outputValue.style.color = "#bfb349";
+                            break;
+                        case "INFO":
+                            outputValue.style.color = "#54a9d1";
+                            break;
+                        default:
+                            outputValue.style.color = "#b8b8b8";
+                            break;
+                    }
+
+                    console.log(type);
+
                     consoleContainer.appendChild(outputValue);
                 });
             }).catch(error => {

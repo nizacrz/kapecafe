@@ -1,9 +1,7 @@
-[LOG] 11-15-2023 21:17:11: User 19 connected to Console!
-[LOG] 11-15-2023 21:17:11: User 20 connected to Console!
-[LOG] 11-15-2023 21:17:11: User 19 connected to Console!
-[LOG] 11-15-2023 21:17:11: User 21 connected to Console!
-[LOG] 11-15-2023 21:17:11: User 19 connected to Console!
-[LOG] 11-15-2023 21:17:11: User 22 connected to Console!
-[LOG] 11-15-2023 21:17:11: User 19 connected to Console!
-[LOG] 11-15-2023 21:17:11: User 23 connected to Console!
-[LOG] 11-15-2023 21:17:11: User 19 connected to Console!
+[INFO] 11-17-2023 02:47:56: User 19 connected to Console!
+[LOG] 11-17-2023 02:47:56: User 19 connected to Console!
+[WARN] 11-17-2023 02:47:56: User 19 connected to Console!
+[ERROR] 11-17-2023 02:47:56: User 19 connected to Console!
+[CRITICAL] 11-17-2023 02:47:56: User 19 connected to Console!
+[INFO] 11-17-2023 03:00:00: User 19 connected to Console!
+[INFO] 11-17-2023 03:01:00: User 19 connected to Console!
