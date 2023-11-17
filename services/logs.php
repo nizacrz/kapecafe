@@ -72,11 +72,14 @@ class SSEHandler
         return true;
     }
 
-    public function getLogData($numberOfLines = 10)
+    public function getLogData($numberOfLines = 100)
     {
         // Read the first x lines of the log file
         $logFile = file('../logs.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        $linesToSend = array_slice($logFile, 0, $numberOfLines);
+
+
+        // Ensure startAtLine is within the bounds of the file
+        $linesToSend = array_slice(array_reverse($logFile), 0, $numberOfLines);
 
         // Prepare the response as a JSON object
         $response = json_encode($linesToSend);
@@ -92,6 +95,6 @@ class SSEHandler
 
 if (isset($_GET['request'])) {
     $sse = new SSEHandler();
-    $numberOfLines = isset($_GET['lines']) ? max(1, intval($_GET['lines'])) : 10;
+    $numberOfLines = isset($_GET['lines']) ? max(1, intval($_GET['lines'])) : 100;
     $sse->getLogData($numberOfLines);
 }

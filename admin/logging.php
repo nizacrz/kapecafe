@@ -65,6 +65,10 @@ $log->log("User " . $_SESSION['id'] . " connected to Console!")
             width: 100%;
             height: 500px;
             overflow-y: scroll;
+            scroll-behavior: smooth;
+
+            display: flex;
+            flex-direction: column-reverse;
         }
 
         .console>h1 {
@@ -120,21 +124,26 @@ $log->log("User " . $_SESSION['id'] . " connected to Console!")
         </div>
     </div>
     <script>
-        // setInterval(updateConsoleData, 500);
+        setInterval(() => updateConsoleData(), 1000);
 
         function updateConsoleData() {
-            fetch('/services/logs.php?request&lines=50').then(res => res.text()).then(data => {
+            console.log("updated..");
+            fetch('/services/logs.php?request').then(res => res.text()).then(data => {
                 const consoleContainer = document.getElementById("console");
 
                 const outputStream = JSON.parse(data)
 
-                for (dataValue in outputStream) {
-                    const outputValue = document.createElement('h1');
-                    outputValue.textContent = outputStream[dataValue];
-
-                    consoleContainer.appendChild(outputValue);
+                // Remove children
+                while (consoleContainer.firstChild) {
+                    consoleContainer.removeChild(consoleContainer.firstChild);
                 }
-                console.log(data);
+
+                // Append new elements
+                outputStream.forEach(value => {
+                    const outputValue = document.createElement('h1');
+                    outputValue.textContent = value;
+                    consoleContainer.appendChild(outputValue);
+                });
             }).catch(error => {
                 console.error("Error fetching log data: ", error);
             });
