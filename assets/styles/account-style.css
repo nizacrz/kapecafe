@@ -157,3 +157,45 @@ body {
   font-size: 20px;
 }
 
+/* New Styles for Compromised Screen */
+.body {
+  background-color: #B33A3A;
+}
+
+.attention {
+  color: #B33A3A;
+  font-size: 2.5rem; 
+  font-weight: 800;
+}
+
+.compromised {
+  font-weight: bold;
+}
+
+.container .button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.container .button-row .btn {
+  width: 48%;
+  padding: 15px 20px;
+  text-align: center;
+  border: none;
+  background: #6e3d0f;
+  outline: none;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+}
+
+.container .button-row .btn:hover {
+  transform: translateY(-5px);
+  background: #6e3d0f;
+  text-decoration: none;
+}
+/* End of New Styles */
