@@ -72,7 +72,6 @@ $log->info("User " . $_SESSION['id'] . " connected to Console!")
         }
 
         .console>h1 {
-            color: rgb(200, 200, 200);
             display: block;
             font-size: 20px;
             font-weight: 500;
@@ -97,6 +96,55 @@ $log->info("User " . $_SESSION['id'] . " connected to Console!")
         .console-control p {
             margin-right: 20px;
         }
+
+        .log-log {
+            color: #b8b8b8;
+        }
+
+        .log-warn {
+            color: #bfb349;
+        }
+
+        .log-info {
+            color: #54a9d1;
+        }
+
+        .log-error {
+            color: #ad2f2f;
+        }
+
+        .log-critical {
+            color: #9d1dab;
+        }
+
+        .console.light-mode {
+            background-color: #ededed;
+        }
+
+
+        .console.light-mode .log-log {
+            color: #1f1f1f;
+        }
+
+        .console.light-mode .log-warn {
+            color: #cf9117;
+        }
+
+        .console.light-mode .log-info {
+            color: #1653e0;
+        }
+
+        .console.light-mode .log-error {
+            color: #bf0404;
+        }
+
+        .console.light-mode .log-critical {
+            color: #ff00bf;
+        }
+
+        .display-none {
+            display: none;
+        }
     </style>
 </head>
 
@@ -105,19 +153,19 @@ $log->info("User " . $_SESSION['id'] . " connected to Console!")
         <img src="/assets/logo/Icon.png" style="display:block; margin-right: auto; margin-left: auto;">
         <p>Kapecafe console v1.0.0</p>
         <div class="console-control">
-            <input type="checkbox" />
-            <p>Gray Terminal</p>
-            <input type="radio" name="listen" value="all" checked>
+            <input type="checkbox" id="lightMode" onclick="switchMode()" />
+            <p>Light Mode</p>
+            <input type="radio" name="listen" value="all" onclick="filterData()" checked>
             <p>All</p>
-            <input type="radio" name="listen" value="log">
+            <input type="radio" name="listen" value="log" onclick="filterData()">
             <p>Log</p>
-            <input type="radio" name="listen" value="info">
+            <input type="radio" name="listen" value="info" onclick="filterData()">
             <p>Info</p>
-            <input type="radio" name="listen" value="warn">
+            <input type="radio" name="listen" value="warn" onclick="filterData()">
             <p>Warn</p>
-            <input type="radio" name="listen" value="error">
+            <input type="radio" name="listen" value="error" onclick="filterData()">
             <p>Error</p>
-            <input type="radio" name="listen" value="critical">
+            <input type="radio" name="listen" value="critical" onclick="filterData()">
             <p>Critical</p>
         </div>
         <div class="console" id="console">
@@ -126,10 +174,29 @@ $log->info("User " . $_SESSION['id'] . " connected to Console!")
         </div>
     </div>
     <script>
-        setInterval(() => updateConsoleData(), 1000);
+        setInterval(() => updateConsoleData(), 500);
+
+        function filterData() {
+            // Check which of the 4 is checked
+            const radioButtons = document.querySelectorAll("inputy[type=radio]");
+
+            radioButtons.forEach((btn) => console.log(btn.value));
+
+            // Get the list of things
+            // Filter them
+            // Apply those unfiltered with display: none;
+        }
+
+        function switchMode() {
+            const consoleContainer = document.getElementById("console");
+            if (document.getElementById("lightMode").checked) {
+                consoleContainer.classList.add("light-mode");
+            } else {
+                consoleContainer.classList.remove("light-mode");
+            }
+        }
 
         function updateConsoleData() {
-            console.log("updated..");
             fetch('/services/logs.php?request').then(res => res.text()).then(data => {
                 const consoleContainer = document.getElementById("console");
 
@@ -149,23 +216,21 @@ $log->info("User " . $_SESSION['id'] . " connected to Console!")
 
                     switch (type) {
                         case "CRITICAL":
-                            outputValue.style.color = "#9d1dab";
+                            outputValue.classList.add("log-critical");
                             break;
                         case "ERROR":
-                            outputValue.style.color = "#ad2f2f";
+                            outputValue.classList.add("log-error");
                             break;
                         case "WARN":
-                            outputValue.style.color = "#bfb349";
+                            outputValue.classList.add("log-warn");
                             break;
                         case "INFO":
-                            outputValue.style.color = "#54a9d1";
+                            outputValue.classList.add("log-info");
                             break;
                         default:
-                            outputValue.style.color = "#b8b8b8";
+                            outputValue.classList.add("log-log");
                             break;
                     }
-
-                    console.log(type);
 
                     consoleContainer.appendChild(outputValue);
                 });

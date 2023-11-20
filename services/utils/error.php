@@ -1,6 +1,6 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'] . '/shared/general.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/shared/general.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,9 +28,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/shared/general.php';
     <?php html_navbar() ?>
     <section class="contact1">
         <div class="content1" style="text-align: center;">
-            <h2><?php echo http_response_code() ?></h2>
+            <h2><?php echo http_response_code(); ?></h2>
             <h2>An Error has occurred</h2>
-            <p>It seems you attempted to access a page that caused that error.</p>
+            <p><?php if (isset($_SESSION['error_message'])) {
+                    echo $_SESSION["error_message"];
+                    unset($_SESSION["error_message"]);
+                } else { ?>It seems you attempted to access a page that caused that error.<?php } ?></p>
         </div>
     </section>
     <?php html_footer();

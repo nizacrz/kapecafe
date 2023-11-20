@@ -5,3 +5,25 @@
 [CRITICAL] 11-17-2023 02:47:56: User 19 connected to Console!
 [INFO] 11-17-2023 03:00:00: User 19 connected to Console!
 [INFO] 11-17-2023 03:01:00: User 19 connected to Console!
+[INFO] 11-17-2023 03:27:04: User 19 connected to Console!
+[INFO] 11-17-2023 03:27:25: User 19 connected to Console!
+[INFO] 11-17-2023 03:32:50: User 19 connected to Console!
+[INFO] 11-17-2023 03:38:06: User 19 connected to Console!
+[INFO] 11-17-2023 03:38:37: User 19 connected to Console!
+[INFO] 11-17-2023 03:39:00: User 19 connected to Console!
+[INFO] 11-17-2023 03:39:30: User 19 connected to Console!
+[INFO] 11-17-2023 03:40:05: User 19 connected to Console!
+[INFO] 11-17-2023 03:41:28: User 19 connected to Console!
+[INFO] 11-17-2023 03:41:34: User 19 connected to Console!
+[INFO] 11-17-2023 03:41:58: User 19 connected to Console!
+[INFO] 11-17-2023 03:42:58: User 19 connected to Console!
+[INFO] 11-17-2023 03:43:12: User 19 connected to Console!
+[INFO] 11-17-2023 03:43:31: User 19 connected to Console!
+[INFO] 11-17-2023 03:43:50: User 19 connected to Console!
+[CRITICAL] 11-20-2023 05:49:47: @AdminAddressMismatch: Admin logged in with id: 19, remote: ::1, recorded: 64.224.121.113
+[CRITICAL] 11-20-2023 05:51:19: @AdminAddressMismatch: Admin logged in with id: 19, remote: ::1, recorded: 64.224.121.113
+[ERROR] 11-20-2023 05:55:43: @RestrictedAccount: A compromised admin account [id: 19] attempted to access a protected resource.
+[ERROR] 11-20-2023 05:56:30: @RestrictedAccount: A compromised admin account [id: 19] attempted to access a protected resource.
+[ERROR] 11-20-2023 05:57:07: @RestrictedAccount: A compromised admin account [id: 19] attempted to access a protected resource.
+[ERROR] 11-20-2023 05:57:30: @RestrictedAccount: A compromised admin account [id: 19] attempted to access a protected resource.
+[ERROR] 11-20-2023 05:57:49: @RestrictedAccount: A compromised admin account [id: 19] attempted to access a protected resource.

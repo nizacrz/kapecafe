@@ -1,6 +1,9 @@
 <?php
 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/string.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/ip.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/logger.php';
+
 
 class User
 {
@@ -17,6 +20,8 @@ class User
     public $email;
     public $password;
     public $role;
+    public $remote_address;
+    public $is_compromised;
 
     // Constructor
     public function __construct($db)
@@ -62,6 +67,8 @@ class User
         $this->email = $row['email'];
         $this->password = $row['password'];
         $this->role = $row['role'];
+        $this->remote_address = $row['initial_remote_address'];
+        $this->is_compromised = $row['is_compromised'];
         return true;
     }
 
@@ -96,6 +103,8 @@ class User
             $this->last_name = $row['last_name'];
             $this->email = $row['email'];
             $this->role = $row['role'];
+            $this->remote_address = $row['initial_remote_address'];
+            $this->is_compromised = $row['is_compromised'];
             return true;
         }
 
@@ -116,7 +125,8 @@ class User
             username = :username,
             email = :email,
             password = :password,
-            role = :role";
+            role = :role
+            initial_remote_address = :ip_address";
 
         // Prepare statement
         $stmt = $this->conn->prepare($query);
@@ -127,6 +137,7 @@ class User
         $this->username = Str::sanitizeString($this->username);
         $this->email = Str::sanitizeString($this->email);
         $this->role = Str::sanitizeString($this->role);
+        $this->remote_address = Str::sanitizeIP($this->remote_address);
 
         // Hash + Salt password
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
@@ -138,6 +149,7 @@ class User
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':role', $this->role);
+        $stmt->bindParam(':ip_address', $this->remote_address);
 
         if ($stmt->execute()) {
             return true;
@@ -162,6 +174,22 @@ class User
             return true;
         }
         return false;
+    }
+
+    public function set_is_compromised()
+    {
+        $query = "UPDATE {$this->DB_TABLE} SET is_compromised = :is_compromised, recent_remote_address = :recent_remote_address WHERE id = :id";
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind data
+        $stmt->bindParam(':is_compromised', $this->is_compromised);
+        $stmt->bindParam(':recent_remote_address', $this->remote_address);
+        $stmt->bindParam(':id', $this->id);
+
+        // Execute Query
+        $stmt->execute();
     }
 
     private function setProperties()

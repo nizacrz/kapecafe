@@ -16,6 +16,11 @@ class Str
         return htmlspecialchars(strip_tags($raw));
     }
 
+    public static function sanitizeIP($raw)
+    {
+        return filter_var($raw, FILTER_VALIDATE_IP);
+    }
+
     public static function sanitizeEmail($raw)
     {
         return filter_var($raw, FILTER_SANITIZE_EMAIL);

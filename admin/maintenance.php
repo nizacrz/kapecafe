@@ -5,8 +5,10 @@ include_once '../services/config/Database.php';
 include_once '../services/models/User.php';
 include_once '../services/models/Product.php';
 
-session_start();
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/utils/logger.php';
 
+session_start();
+$log = log::getinstance();
 /**
  * Get ID from session data. This proves user authentication
  */
@@ -19,6 +21,14 @@ if (isset($_SESSION['id'])) {
     // In case user is not an admin
     if ($user->role !== "Admin") {
         http_response_code(401); // Unauthorized
+        include_once('../services/utils/error.php');
+        exit();
+    }
+
+    if ($user->is_compromised == 1) {
+        http_response_code(401); // Unauthorized
+        $log->err("@RestrictedAccount: A compromised admin account [id: " . $user->id . "] attempted to access a protected resource.");
+        $_SESSION['error_message'] = "Compromised Admin account attempted to access an admin functionality. Please change your password and notify the company as soon as possible.";
         include_once('../services/utils/error.php');
         exit();
     }
@@ -47,6 +57,7 @@ if (isset($_GET['delete'])) {
     $delete_result = $product->delete();
 
     if ($delete_result) {
+        $log->info("Admin " . $user->id . " deleted product " . $product->id);
         header('location:maintenance.php?message=success_delete');
         die();
     } else {
@@ -82,6 +93,7 @@ if (isset($_POST['add_product'])) {
 
             move_uploaded_file($uploaded_image['tmp_name'], $update_p_image_folder);
         }
+        $log->info("Admin " . $user->id . " created a new product.");
         header('Location:maintenance.php?message=success_create');
     } else {
         // Creation Failed
@@ -120,6 +132,7 @@ if (isset($_POST['update_product'])) {
 
             move_uploaded_file($uploaded_image['tmp_name'], $update_p_image_folder);
         }
+        $log->info("Admin " . $user->id . " updated product " . $product->id);
         header('location:maintenance.php?message=success_update');
     } else {
         // Failed to update
