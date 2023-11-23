@@ -73,7 +73,24 @@ if (isset($_POST["createAccount"])) {
                 : $_SERVER['REMOTE_ADDR']);
         $ip = Str::sanitizeIP($ip);
 
+        if (isset($_SESSION['logon_time'])) {
+            if (time() > $_SESSION['logon_time']) {
+                unset($_SESSION['logon_time']);
+                unset($_SESSION['logon_attempt']);
+            } else {
+                header("Location: /signin.php?error=Login Timeout. Please wait..");
+                exit();
+            }
+        }
+
         if ($user->login()) {
+            if (isset($_SESSION['logon_time'])) {
+                unset($_SESSION['logon_time']);
+            }
+            if (isset($_SESSION['logon_attempt'])) {
+                unset($_SESSION['logon_attempt']);
+            }
+
             $_SESSION['id'] = $user->id;
 
             if ($ip !== $user->remote_address) {
@@ -103,7 +120,34 @@ if (isset($_POST["createAccount"])) {
                 die();
             }
         } else {
-            header("Location: /signin.php?error=Invalid username or password! Please try again.");
+            $ip = isset($_SERVER['HTTP_CLIENT_IP'])
+                ? $_SERVER['HTTP_CLIENT_IP']
+                : (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+                    ? $_SERVER['HTTP_X_FORWARDED_FOR']
+                    : $_SERVER['REMOTE_ADDR']);
+
+            if (!isset($_SESSION['logon_attempt'])) {
+                $_SESSION['logon_attempt'] = 1;
+                header("Location: /signin.php?error=Invalid username or password! Please try again.");
+            } else {
+                if ($_SESSION['logon_attempt'] > 5) {
+                    if (!isset($_SESSION['logon_time'])) {
+                        $_SESSION['logon_time'] = time() + 30;
+                        header("Location: /signin.php?error=Login Timeout. Please wait..");
+                    } else {
+                        if (time() > $_SESSION['logon_time']) {
+                            unset($_SESSION['logon_time']);
+                            unset($_SESSION['logon_attempt']);
+                            header("Location: /signin.php?error=Invalid username or password! Please try again.");
+                        } else {
+                            header("Location: /signin.php?error=Login Timeout. Please wait..");
+                        }
+                    }
+                } else {
+                    $_SESSION['logon_attempt']++;
+                    header("Location: /signin.php?error=Invalid username or password! Please try again.");
+                }
+            }
             exit();
         }
     } else {

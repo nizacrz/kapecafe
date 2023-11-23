@@ -125,7 +125,7 @@ class User
             username = :username,
             email = :email,
             password = :password,
-            role = :role
+            role = :role,
             initial_remote_address = :ip_address";
 
         // Prepare statement
