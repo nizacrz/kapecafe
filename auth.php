@@ -1,6 +1,7 @@
 <?php
 include_once './services/config/Database.php';
 include_once './services/models/User.php';
+include_once './services/utils/totp_generator.php';
 
 /**
  * WARN: This uses HTML4 Tags 🚩
@@ -19,11 +20,40 @@ if (isset($_SESSION['id'])) {
     $user->id = intval($_SESSION['id']);
     $user->read_single();
 
-    if (isset($user->username)) {
-        header("Location: /index.php");
+
+    // If user has no auth_key..
+    if ($user->auth_key !== NULL && $user->is_compromised === 0) {
+        header("Location: /index.php?rekt");
         die();
     }
+} else {
+    header("Location: /index.php?rip");
+    die();
 }
+
+
+
+$otp = new TOTPGenerator();
+
+// Make the new IP Address Permanent
+if (!($user->is_compromised && $user->auth_key !== NULL)) {
+    // This is probably a new account
+    // Generate OTP code
+    if (isset($_SESSION['otp_key'])) {
+        $user->auth_key = $_SESSION['otp_key'];
+        echo $_SESSION['otp_key'];
+        die();
+    } else {
+        $user->auth_key = $otp->generateSecretKey();
+        $_SESSION['otp_key'] = $user->auth_key;
+    }
+
+    // Generate URL For authenticator
+    $otp_url = $otp->generateQRCodeUrl($user->username, $user->auth_key);
+}
+
+
+
 
 ?>
 
@@ -48,7 +78,15 @@ if (isset($_SESSION['id'])) {
 
             <form action="/services/handler.php?auth" method="POST" class="login-email">
                 <p class="login-text" style="font-size: 2rem; font-weight: 800;">Two-factor Authentication</p>
-                <center><span class="subtitle">Please input the 2fa code we emailed you!</span></center>
+                <?php
+                if (isset($otp_url)) {
+                ?>
+                    <center><span class="subtitle">Please scan the QR Code using an authenticator app and then input the otp code!</span></center>
+
+                    <img src='<?php echo $otp->generateQRCodeImage(urlencode($otp_url)); ?>' alt="Scan with Authenticator App">
+                <?php } else { ?>
+                    <center><span class="subtitle">New Location: Please input the code from your 2fa app!</span></center>
+                <?php } ?>
                 <br>
                 <div class="input-group">
                     <input type="text" required placeholder="code" name="code">
@@ -59,7 +97,6 @@ if (isset($_SESSION['id'])) {
                 </div>
             </form>
     </div>
-
     <!-- JQUERY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="/assets/scripts/account.js"></script>

@@ -23,6 +23,7 @@ class User
     public $remote_address;
     public $is_compromised;
     public $is_complete_auth;
+    public $auth_key;
 
     // Constructor
     public function __construct($db)
@@ -71,6 +72,7 @@ class User
         $this->remote_address = $row['initial_remote_address'];
         $this->is_compromised = $row['is_compromised'];
         $this->is_complete_auth = $row['is_complete_auth'];
+        $this->auth_key = $row['auth_key'];
         return true;
     }
 
@@ -108,6 +110,7 @@ class User
             $this->remote_address = $row['initial_remote_address'];
             $this->is_compromised = $row['is_compromised'];
             $this->is_complete_auth = $row['is_complete_auth'];
+            $this->auth_key = $row['auth_key'];
             return true;
         }
 
@@ -195,15 +198,46 @@ class User
         $stmt->execute();
     }
 
-    public function set_is_complete_auth()
+    public function set_new_ip()
     {
-        $query = "UPDATE {$this->DB_TABLE} SET is_complete_auth = :is_complete_auth WHERE id = :id";
+        $query = "UPDATE {$this->DB_TABLE} SET initial_remote_address = :initial_remote_address WHERE id = :id";
 
         // Prepare statement
         $stmt = $this->conn->prepare($query);
 
         // Bind data
-        $stmt->bindParam(':is_complete_auth', $this->is_compromised);
+        $stmt->bindParam(':initial_remote_address', $this->remote_address);
+        $stmt->bindParam(':id', $this->id);
+
+        // Execute Query
+        $stmt->execute();
+    }
+
+    public function set_is_complete_auth()
+    {
+        $query = "UPDATE {$this->DB_TABLE} SET is_complete_auth = :is_complete_auth, auth_key = :auth_key WHERE id = :id";
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind data
+        $stmt->bindParam(':is_complete_auth', $this->is_complete_auth);
+        $stmt->bindParam(':auth_key', $this->auth_key);
+        $stmt->bindParam(':id', $this->id);
+
+        // Execute Query
+        $stmt->execute();
+    }
+
+    public function set_password()
+    {
+        $query = "UPDATE {$this->DB_TABLE} SET password = :password WHERE id = :id";
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+        $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':id', $this->id);
 
         // Execute Query
