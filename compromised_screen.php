@@ -32,7 +32,7 @@ if (isset($_SESSION['id'])) {
 
 if (isset($_SESSION['new_pass'])) {
     $pass = $_SESSION['new_pass'];
-    // unset($_SESSION['new_pass']);
+    unset($_SESSION['new_pass']);
 }
 
 ?>
@@ -50,6 +50,33 @@ if (isset($_SESSION['new_pass'])) {
     <link rel="stylesheet" href="/assets/styles/account-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <style>
+        .container .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .container .button-row .btn {
+            width: 48%;
+            padding: 15px 20px;
+            text-align: center;
+            border: none;
+            background: #6e3d0f;
+            outline: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .container .button-row .btn:hover {
+            transform: translateY(-5px);
+            background: #6e3d0f;
+            text-decoration: none;
+        }
+
         body {
             background-color: #B33A3A;
         }

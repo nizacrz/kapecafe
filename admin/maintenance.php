@@ -174,6 +174,7 @@ if (isset($_GET['category'])) {
             <h1><?php
                 echo isset($category) ? $category : "All Products";
                 ?></h1>
+            <a href="logging.php" class="option-btn" style="width: 223px; padding-top: 15px; margin-bottom: 20px;"> <i class="fa-solid fa-rectangle-terminal"></i></i> Logs </a>
             <a href="maintenance.php?create" class="option-btn" style="width: 223px; padding-top: 15px; margin-bottom: 20px;"> <i class="fa-solid fa-plus"></i></i> Add New Product </a>
             <table>
                 <thead>

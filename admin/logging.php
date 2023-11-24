@@ -155,18 +155,6 @@ $log->info("User " . $_SESSION['id'] . " connected to Console!")
         <div class="console-control">
             <input type="checkbox" id="lightMode" onclick="switchMode()" />
             <p>Light Mode</p>
-            <input type="radio" name="listen" value="all" onclick="filterData()" checked>
-            <p>All</p>
-            <input type="radio" name="listen" value="log" onclick="filterData()">
-            <p>Log</p>
-            <input type="radio" name="listen" value="info" onclick="filterData()">
-            <p>Info</p>
-            <input type="radio" name="listen" value="warn" onclick="filterData()">
-            <p>Warn</p>
-            <input type="radio" name="listen" value="error" onclick="filterData()">
-            <p>Error</p>
-            <input type="radio" name="listen" value="critical" onclick="filterData()">
-            <p>Critical</p>
         </div>
         <div class="console" id="console">
             <?php

@@ -52,9 +52,6 @@ if (!($user->is_compromised && $user->auth_key !== NULL)) {
     $otp_url = $otp->generateQRCodeUrl($user->username, $user->auth_key);
 }
 
-
-
-
 ?>
 
 <!DOCTYPE html>

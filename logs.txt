@@ -22,3 +22,8 @@
 [CRITICAL] 11-24-2023 15:12:59: @AdminAddressMismatch: Admin logged in with id: 19, remote: ::1, recorded: 64.224.121.113
 [CRITICAL] 11-24-2023 15:17:05: @AdminAddressMismatch: Admin logged in with id: 19, remote: ::1, recorded: 64.224.121.113
 [INFO] 11-24-2023 15:20:07: User logged in the id: 19, Address: ::1
+[INFO] 11-24-2023 15:58:54: User logged in the id: 19, Address: ::1
+[CRITICAL] 11-24-2023 15:59:48: @AdminAddressMismatch: Admin logged in with id: 19, remote: ::1, recorded: kemerut
+[INFO] 11-24-2023 16:09:35: User logged in the id: 19, Address: ::1
+[INFO] 11-24-2023 16:09:37: User 19 connected to Console!
+[INFO] 11-24-2023 16:10:02: User 19 connected to Console!

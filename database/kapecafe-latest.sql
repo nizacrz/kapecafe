@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2022 at 11:56 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.29
+-- Generation Time: Nov 24, 2023 at 03:42 PM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.0.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,19 +29,29 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `cart` (
   `id` int(100) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `price` varchar(100) NOT NULL,
-  `image` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
   `quantity` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id`, `user_id`, `product_id`, `quantity`) VALUES
+(24, 18, 27, 2),
+(25, 18, 32, 1),
+(26, 17, 32, 1),
+(27, 17, 31, 1),
+(28, 17, 30, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order`
+-- Table structure for table `orders`
 --
 
-CREATE TABLE `order` (
+CREATE TABLE `orders` (
   `id` int(255) NOT NULL,
   `name` varchar(100) NOT NULL,
   `number` varchar(12) NOT NULL,
@@ -53,22 +63,23 @@ CREATE TABLE `order` (
   `state` varchar(100) NOT NULL,
   `country` varchar(100) NOT NULL,
   `pin_code` int(10) NOT NULL,
-  `total_products` varchar(255) NOT NULL,
+  `total_products` varchar(9999) NOT NULL,
   `total_price` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `order`
+-- Dumping data for table `orders`
 --
 
-INSERT INTO `order` (`id`, `name`, `number`, `email`, `method`, `flat`, `street`, `city`, `state`, `country`, `pin_code`, `total_products`, `total_price`) VALUES
-(1, 'mimi', '2', 'sakayna@gmail.com', 'cash on delivery', 'dwdw', 'confe', 'antipolo', 'hehe', 'hehe', 123456, 'Ube Cake (1) , Pianono (1) ', '630'),
+INSERT INTO `orders` (`id`, `name`, `number`, `email`, `method`, `flat`, `street`, `city`, `state`, `country`, `pin_code`, `total_products`, `total_price`) VALUES
 (2, 'mimi', '2', 'sakayna@gmail.com', 'cash on delivery', 'dwdw', 'confe', 'antipolo', 'hehe', 'hehe', 123456, 'Ube Cake (1) , Pianono (1) ', '630'),
 (3, 'mimi', '1234', 'sakayna@gmail.com', 'cash on delivery', '1', '1', '1', '1', '1', 1, 'Ube Cake (1) , Pianono (1) ', '630'),
 (4, 'mimi', '1234', 'sakayna@gmail.com', 'cash on delivery', '1', '1', '1', '1', '1', 1, 'Ube Cake (1) , Pianono (1) ', '630'),
 (5, 'Koopi Cruz', '09691955153', 'kopitayo@gmail.com', 'cash on delivery', '128', 'Livelihoo St', 'Quezon City', 'NCR', 'Philippines', 1126, 'Ube Cake (1) , Pianono (1) ', '630'),
 (6, 'sdf', 'sdf', 'sdf@gmail.com', 'cash on delivery', 'sdf', 'sdf', 'sdf', 'sdf', 'sdf', 0, 'Ube Cake (1) , Pianono (1) ', '630'),
-(7, 'sdf', 'sfd', 'sdf@gmail.com', 'cash on delivery', 'sfd', 'dfs', 'df', 'fds', 'dfs', 0, 'Ube Cake (1) , Pianono (1) ', '630');
+(7, 'sdf', 'sfd', 'sdf@gmail.com', 'cash on delivery', 'sfd', 'dfs', 'df', 'fds', 'dfs', 0, 'Ube Cake (1) , Pianono (1) ', '630'),
+(8, 'Alds', '1', 'sa@gmail.com', 'cash on delivery', 'dwdw', 'confe', 'antipolo', 'hehe', 'ph', 1234, 'Ube Cake (1)', '630'),
+(13, 'Im', '0000', 'not@not.com', 'cash on delivery', 'sur', 'eabout', 'this', 'lmao', 'hehe', 12345, 'Chocolate Strawberry Cake (1) ', '775');
 
 -- --------------------------------------------------------
 
@@ -77,7 +88,7 @@ INSERT INTO `order` (`id`, `name`, `number`, `email`, `method`, `flat`, `street`
 --
 
 CREATE TABLE `products` (
-  `id` int(11) NOT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
   `category` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
   `description` varchar(100) NOT NULL,
@@ -90,7 +101,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category`, `name`, `description`, `image`, `price`) VALUES
-(27, 'Cakes', 'Strawberry Shortcake', 'Strawberry cake with fresh strawberry filling, icing, and glazed topping.', 'CAKE1.png', '775.00'),
+(27, 'Cakes', 'Strawberry Shortcake', 'Strawberry cake with fresh strawberry filling, icing, and glazed topping.', 'c3f49644818dd162f11f0d8f8936a694.png', '775'),
 (28, 'Cakes', 'Ube Cake', 'Ube cake with fresh ube jam filling and frosting.', 'CAKE2.png', '555.00'),
 (29, 'Cakes', 'Red Velvet Cake', 'Moist cake with a hint of vanilla, smothered with cream cheese frosting.', 'CAKE3.png', '555.00'),
 (30, 'Cakes', 'Chocolate Strawberry Cake', ' Moist chocolate cake coated with rich chocolate ganache with fresh strawberry toppings.', 'CAKE4.png', '775.00'),
@@ -108,8 +119,7 @@ INSERT INTO `products` (`id`, `category`, `name`, `description`, `image`, `price
 (42, 'Kakanin', 'Puto Bumbóng', 'A Filipino purple rice cake steamed in bamboo tubes.', 'KAKS1.png', '145.00'),
 (43, 'Kakanin', 'Palitaw', 'A Philippine dessert and snack made with simple rice flour dough coated in coconut and sesame seeds.', 'KAKS2.png', '99.00'),
 (44, 'Kakanin', 'Puto Calasiao', 'A Filipino muffin or steamed rice cake in small bite-sized portions.', 'KAKS3.png', '85.00'),
-(45, 'Kakanin', 'Maja Blanca', 'Sometimes called, coconut pudding. A Filipino dessert made of coconut milk and corn.', 'KAKS4.png', '99.00'),
-(46, 'Kakanin', 'Bibingka', 'A traditional Filipino dessert that is soft rice cake paired with salty duck egg and cheese topping.', 'KAKS5.png', '79.00');
+(45, 'Kakanin', 'Maja Blanca', 'Sometimes called, coconut pudding. A Filipino dessert made of coconut milk and corn.', 'KAKS4.png', '99.00');
 
 -- --------------------------------------------------------
 
@@ -123,17 +133,25 @@ CREATE TABLE `users` (
   `last_name` varchar(100) NOT NULL,
   `username` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `role` varchar(10) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `role` varchar(10) NOT NULL,
+  `initial_remote_address` varchar(45) DEFAULT NULL,
+  `recent_remote_address` varchar(45) DEFAULT NULL,
+  `is_compromised` tinyint(1) NOT NULL DEFAULT 0,
+  `is_complete_auth` tinyint(1) NOT NULL DEFAULT 0,
+  `auth_key` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `first_name`, `last_name`, `username`, `email`, `password`, `role`) VALUES
-(5, 'Taffy ', 'Cruz', 'cashier', 'admin.cashier@gmail.com', 'Admin@123', 'Admin'),
-(9, 'Koopi', 'Cruz', 'kopitayo', 'kopitayo@gmail.com', 'User@12345!', 'User');
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `username`, `email`, `password`, `role`, `initial_remote_address`, `recent_remote_address`, `is_compromised`, `is_complete_auth`, `auth_key`) VALUES
+(16, 'Elizabeth', 'Amethyst', 'Elizabeth', 'Ame@fake.com', '$2y$10$1Jcyj3/agE8D2aDF8T3hsu4F/tJ8.FhYw2nZiXAUkfFPrqjjfkbG6', 'Admin', '64.224.121.113', NULL, 0, 1, NULL),
+(17, 'John', 'Opal', 'John', 'Opal@fake.com', '$2y$10$9YEapj1UaZJY3usTQ.jL4OiZyWGUmT9m4k1OIwrIG/QyYaOgIapVq', 'User', '64.224.121.113', NULL, 0, 1, NULL),
+(18, 'Ken', 'Sword', 'Ken', 'Ken@fake.com', '$2y$10$eh1Ptz0KW0/WLJ4K8G2.vuNo6iKAtvS2dvtFiaq2ELl9WUuIpRQ.6', 'User', '64.224.121.113', NULL, 0, 1, NULL),
+(19, 'Amethyst', 'Amethyst', 'Amethyst', 'Amethyst@fakemail.com', '$2y$10$JwNK4N/fg/z.WaXJlWiMkukhKJk1Ny68I4Mc9X2kByC0gb2FWgxIm', 'Admin', '::1', '::1', 0, 1, 'PN4JAGFKKJ2OUQAP5SXRZSONYU'),
+(20, 'John', 'Doe', 'JohnDoe', 'johndoe@apple.com', '$2y$10$wfcvCKoYVCDcWAqqt/J2heBcmDUJDtlYN4T2tmgyUBayhLY0GZofi', 'User', '::1', NULL, 0, 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -143,12 +161,14 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `username`, `email`, `pass
 -- Indexes for table `cart`
 --
 ALTER TABLE `cart`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id_id_fk_link` (`user_id`),
+  ADD KEY `product_id_id_fk_link` (`product_id`);
 
 --
--- Indexes for table `order`
+-- Indexes for table `orders`
 --
-ALTER TABLE `order`
+ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -171,25 +191,36 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT for table `order`
+-- AUTO_INCREMENT for table `orders`
 --
-ALTER TABLE `order`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `orders`
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `product_id_id_fk_link` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_id_id_fk_link` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
