@@ -49,7 +49,9 @@ if (isset($_POST["createAccount"])) {
             $_SESSION['id'] = $user->id;
             $log->info("User created with id: " . $user->id);
 
-            header("Location: /signup.php?success=Your account has been created successfully!");
+            // TODO: Send email for 2fa process
+
+            header("Location: /auth.php");
             die();
         } else {
             header("Location: /signup.php?error=An Unknown error occured!");
@@ -116,7 +118,12 @@ if (isset($_POST["createAccount"])) {
                 header('Location: /admin/maintenance.php');
                 die();
             } else {
-                header('Location: /index.php');
+                if ($user->is_complete_auth === 1) {
+                    header('Location: /index.php');
+                } else {
+                    // TODO: Send Email
+                    header('Location: /auth.php');
+                }
                 die();
             }
         } else {

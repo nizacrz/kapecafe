@@ -22,6 +22,7 @@ class User
     public $role;
     public $remote_address;
     public $is_compromised;
+    public $is_complete_auth;
 
     // Constructor
     public function __construct($db)
@@ -69,6 +70,7 @@ class User
         $this->role = $row['role'];
         $this->remote_address = $row['initial_remote_address'];
         $this->is_compromised = $row['is_compromised'];
+        $this->is_complete_auth = $row['is_complete_auth'];
         return true;
     }
 
@@ -105,6 +107,7 @@ class User
             $this->role = $row['role'];
             $this->remote_address = $row['initial_remote_address'];
             $this->is_compromised = $row['is_compromised'];
+            $this->is_complete_auth = $row['is_complete_auth'];
             return true;
         }
 
@@ -186,6 +189,21 @@ class User
         // Bind data
         $stmt->bindParam(':is_compromised', $this->is_compromised);
         $stmt->bindParam(':recent_remote_address', $this->remote_address);
+        $stmt->bindParam(':id', $this->id);
+
+        // Execute Query
+        $stmt->execute();
+    }
+
+    public function set_is_complete_auth()
+    {
+        $query = "UPDATE {$this->DB_TABLE} SET is_complete_auth = :is_complete_auth WHERE id = :id";
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind data
+        $stmt->bindParam(':is_complete_auth', $this->is_compromised);
         $stmt->bindParam(':id', $this->id);
 
         // Execute Query
