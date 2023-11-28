@@ -50,8 +50,8 @@ class Product
     {
         // Define the search query
         $searchQuery = "SELECT * FROM {$this->DB_TABLE} WHERE 
-    name LIKE :query OR 
-    description LIKE :query";
+    name LIKE '%" . $query . "%' OR 
+    description LIKE '%" . $query . "%'";
 
         // Add pagination if needed
         $limit = '';
@@ -68,15 +68,7 @@ class Product
         $searchQuery = $searchQuery . $limit;
 
         // Prepare statement
-        $stmt = $this->conn->prepare($searchQuery);
-
-        // Bind parameters
-        $searchParam = "%{$query}%";
-        $stmt->bindParam(':query', $searchParam);
-
-        // Execute query
-        $stmt->execute();
-
+        $stmt = $this->conn->query($searchQuery);
         return $stmt;
     }
 
